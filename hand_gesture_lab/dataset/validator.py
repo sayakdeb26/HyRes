@@ -1,49 +1,54 @@
 import numpy as np
+from collections import deque
 
 class Validator:
-    def __init__(self, min_conf=0.5, max_jump_ratio=0.3, ema_alpha=0.5):
+    def __init__(self, min_conf=0.5, max_jump_ratio=0.3, window_size=3):
         self.min_conf = min_conf
         self.max_jump_ratio = max_jump_ratio
-        self.ema_alpha = ema_alpha
+        self.window_size = window_size
         
-        self.prev_keypoints = None
+        # Buffers for temporal smoothing
+        self.buffers = {
+            'pose': deque(maxlen=window_size),
+            'left': deque(maxlen=window_size),
+            'right': deque(maxlen=window_size)
+        }
 
-    def validate_and_smooth(self, keypoints, confidence, img_shape):
+    def validate_and_smooth(self, keypoints, confidence, img_shape, part_name):
         """
-        Validates keypoints and applies EMA smoothing.
-        Returns the smoothed keypoints or None if invalid.
+        Validates keypoints and applies moving average smoothing.
+        part_name: 'pose', 'left', or 'right'
         """
-        if confidence < self.min_conf:
-            self.prev_keypoints = None
+        if keypoints is None or len(keypoints) == 0:
+            return None
+            
+        if confidence is not None and confidence < self.min_conf:
             return None
             
         curr_kp = np.array(keypoints)
         h, w, _ = img_shape
         
-        # Anatomy/Bounds check (wrist is inside the frame)
-        wrist = curr_kp[0]
-        if not (0 <= wrist[0] <= w and 0 <= wrist[1] <= h):
-            self.prev_keypoints = None
-            return None
-            
-        if self.prev_keypoints is not None:
-            # Jump check (prevent swapping hands or false positives)
-            prev_wrist = self.prev_keypoints[0]
-            jump_dist = np.linalg.norm(wrist[:2] - prev_wrist[:2])
+        buffer = self.buffers[part_name]
+        
+        # Kinematic jump check
+        if len(buffer) > 0:
+            prev_kp = buffer[-1]
+            # Use the first keypoint (e.g., wrist for hand, nose for pose) for jump check
+            jump_dist = np.linalg.norm(curr_kp[0][:2] - prev_kp[0][:2])
             frame_diag = np.sqrt(h**2 + w**2)
             
             if jump_dist / frame_diag > self.max_jump_ratio:
-                # Sudden jump, invalidate sequence smoothing
-                self.prev_keypoints = None
-                return None
+                # Sudden jump implies detection error or huge movement. Break sequence.
+                buffer.clear()
+                buffer.append(curr_kp)
+                return curr_kp
                 
-            # EMA Smoothing
-            smoothed_kp = self.ema_alpha * curr_kp + (1 - self.ema_alpha) * self.prev_keypoints
-        else:
-            smoothed_kp = curr_kp
-            
-        self.prev_keypoints = smoothed_kp
+        buffer.append(curr_kp)
+        
+        # Apply moving average over the window
+        smoothed_kp = np.mean(buffer, axis=0)
         return smoothed_kp
 
     def reset(self):
-        self.prev_keypoints = None
+        for b in self.buffers.values():
+            b.clear()
