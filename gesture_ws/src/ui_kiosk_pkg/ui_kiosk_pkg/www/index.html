@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KOLAMeRO UI Kiosk</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+  <!-- Top-left brand text -->
+  <div class="brand tl">
+    <img src="static/kol_logo_wbg.png" alt="logo" class="brand-logo">
+  </div>
+
+  <!-- Bottom-left FAPS text -->
+  <div class="brand-bl">FAPS</div>
+
+  <!-- Bottom-right FAU logo -->
+  <div class="logo-br">
+    <img src="static/fau_logo_white.png" alt="FAU logo">
+  </div>
+
+
+  <main class="page">
+    <!-- Fullscreen toggle button -->
+    <button id="fullscreen-btn" class="fullscreen-btn" title="Toggle fullscreen">⛶</button>
+    <section class="main">
+      <div class="video-box">
+        <video id="clip" autoplay loop muted playsinline style="display:none"></video>
+        <div class="idle-mark" id="idle">Waiting for a clip...</div>
+
+        <!-- HUD Overlay for robot movement -->
+        <div id="hud" class="hud-box">
+          <div id="hud-arrow" class="hud-arrow"></div>
+          <div id="hud-text" class="hud-text">IDLE</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="row">
+          <input id="label" type="text" placeholder="Label..." />
+          <div class="pill" id="conf">conf 0.00</div>
+        </div>
+        <div class="row">
+          <div class="hint" id="hint"></div>
+        </div>
+        <div class="bar">
+          <div class="fill" id="fill"></div>
+        </div>
+        <div class="row actions">
+          <button class="approve" id="approve">Approve</button>
+          <button class="reject" id="reject">Reject</button>
+          <div class="status"><input type="checkbox" id="auto" /> Auto-approve (debug)</div>
+        </div>
+        <div class="status" id="status"></div>
+      </div>
+    </section>
+
+    <!-- History sidebar -->
+    <aside class="aside">
+      <div class="card" style="background:rgba(255,255,255,0.04); padding:16px; border-radius:12px;">
+        <strong style="font-size:14px;">Recent History</strong>
+        <div id="hist" style="margin-top:12px;"></div>
+      </div>
+
+      <!-- Debug Feed -->
+      <div class="card" style="background:rgba(255,255,255,0.04); padding:16px; border-radius:12px;">
+        <strong style="font-size:14px;">Debug Feed</strong>
+        <div style="margin-top:8px;">
+          <label style="font-size:13px; color:#cbd5e1; cursor:pointer;">
+            <input type="checkbox" id="debug-toggle" /> Show Live Feed
+          </label>
+        </div>
+        <div id="debug-box" style="margin-top:10px; display:none;">
+          <img id="debug-img" style="width:100%; border-radius:8px; border:1px solid rgba(255,255,255,0.2);" />
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="/static/app.js"></script>
+</body>
+
+</html>

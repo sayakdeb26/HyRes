@@ -1,0 +1,14 @@
+ui_kiosk_node:
+  ros__parameters:
+    http_host: "0.0.0.0"
+    http_port: 8008
+    media_dir: "/home/sayak/amr_gesture_ws/data/runtime_clips"
+    history_size: 5
+    video_width: 960
+    video_height: 540
+    janitor_enabled: true
+    janitor_interval_s: 3600     # hourly
+    keep_days_approved: 1        # keep approved for 1 day
+    decision_timeout_s: 20.0     # kiosk-side timeout window (used for progress bar)
+    auto_approve_default: false
+    dev_mode: true              # you’ll live-edit via VS Code; node serves embedded HTML by default

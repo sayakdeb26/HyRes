@@ -8,3 +8,4 @@ archive/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+workspace/

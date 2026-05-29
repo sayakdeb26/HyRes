@@ -1,0 +1,9 @@
+builtin_interfaces/Time t_center
+float32 pre_secs
+float32 post_secs
+float32 x_min
+float32 y_min
+float32 x_max
+float32 y_max
+string session_id
+string window_id

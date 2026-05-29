@@ -1,0 +1,7 @@
+string clip_path
+string label_hint
+string session_id    # for logging and traceability
+---
+string label
+float32 confidence
+string rationale
