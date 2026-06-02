@@ -12,20 +12,37 @@ sys.path.append('/home/sayak/HybridTestBed/hand_gesture_lab')
 from HybridTestBed.mixed_strategy import MixedStrategy, StrategyConfig
 from train import GestureLSTM
 
-def train_continual(task_name="DS1", model_path="/home/sayak/HybridTestBed/hand_gesture_lab/weights/best_lstm_model.pth", out_model_path="/home/sayak/HybridTestBed/hand_gesture_lab/weights/best_lstm_model_continual.pth"):
+def train_continual(task_name="DS1", base_model_path="/home/sayak/HybridTestBed/hand_gesture_lab/weights/best_lstm_model.pth"):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
     # Disable cuDNN to prevent version mismatch crash
     torch.backends.cudnn.enabled = False
+    
+    # Setup versioned checkpoint naming automatically
+    tasks = ["DS1", "DS2", "DS3"]
+    if task_name not in tasks:
+        raise ValueError(f"Unknown task: {task_name}")
+    
+    task_idx = tasks.index(task_name) + 1  # 1, 2, 3
+    
+    if task_idx == 1:
+        model_path = base_model_path
+        cl_state_path = None
+    else:
+        model_path = f"/home/sayak/HybridTestBed/hand_gesture_lab/weights/best_lstm_model_rt{task_idx-1}.pth"
+        cl_state_path = f"/home/sayak/HybridTestBed/hand_gesture_lab/weights/cl_state_rt{task_idx-1}.pth"
+        
+    out_model_path = f"/home/sayak/HybridTestBed/hand_gesture_lab/weights/best_lstm_model_rt{task_idx}.pth"
+    out_cl_state_path = f"/home/sayak/HybridTestBed/hand_gesture_lab/weights/cl_state_rt{task_idx}.pth"
     
     # 1. Load LSTM Model
     # input_dim = 296 (30 frames x 296 dimensions)
     model = GestureLSTM(input_dim=296, num_classes=6).to(device)
     if os.path.exists(model_path):
         model.load_state_dict(torch.load(model_path, map_location=device))
-        print(f"Loaded base model weights from {model_path}")
+        print(f"Loaded weights from {model_path}")
     else:
-        print(f"Warning: Base model weights not found at {model_path}")
+        print(f"Warning: Model weights not found at {model_path}")
         
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
@@ -35,11 +52,13 @@ def train_continual(task_name="DS1", model_path="/home/sayak/HybridTestBed/hand_
     strategy = MixedStrategy(config)
     
     # Load EWC + Replay Buffer state if it exists
-    cl_state_path = "/home/sayak/HybridTestBed/hand_gesture_lab/weights/cl_state.pth"
-    if strategy.load_state(cl_state_path):
-        print(f"Successfully loaded continual learning state (Fisher + Replay Buffer) from {cl_state_path}")
+    if cl_state_path and os.path.exists(cl_state_path):
+        if strategy.load_state(cl_state_path):
+            print(f"Successfully loaded continual learning state (Fisher + Replay Buffer) from {cl_state_path}")
+        else:
+            print(f"Failed to load continual learning state from {cl_state_path}. Starting fresh.")
     else:
-        print(f"No existing continual learning state found at {cl_state_path}. Starting fresh.")
+        print("No prior continual learning state path specified or found. Starting fresh.")
     
     # 3. Simulate/Load task training data
     print(f"Starting continual learning retraining loop for task: {task_name}")
@@ -71,13 +90,15 @@ def train_continual(task_name="DS1", model_path="/home/sayak/HybridTestBed/hand_
     strategy.on_task_end(X_task, y_task)
     
     # Save continual learning state
-    strategy.save_state(cl_state_path)
-    print(f"Successfully saved continual learning state (Fisher + Replay Buffer) to {cl_state_path}")
+    os.makedirs(os.path.dirname(out_cl_state_path), exist_ok=True)
+    strategy.save_state(out_cl_state_path)
+    print(f"Successfully saved continual learning state (Fisher + Replay Buffer) to {out_cl_state_path}")
     
     # 6. Save weights
     os.makedirs(os.path.dirname(out_model_path), exist_ok=True)
     torch.save(model.state_dict(), out_model_path)
-    print(f"Successfully saved consolidated continual learning weights to {out_model_path}")
+    print(f"Successfully saved consolidated weights to {out_model_path}")
 
 if __name__ == '__main__':
-    train_continual()
+    # Test task 1
+    train_continual(task_name="DS1")

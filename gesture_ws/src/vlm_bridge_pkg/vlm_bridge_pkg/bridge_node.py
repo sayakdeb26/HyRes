@@ -199,7 +199,7 @@ class BridgeNode(Node):
 
     def vlm_response_callback(self, future, clip_path):
         try:
-            # Add timeout check
+            resp = future.result()
             t5 = self.get_clock().now().nanoseconds
             if self.current_session_id in self.timestamp_cache:
                 self.timestamp_cache[self.current_session_id]['t5'] = t5

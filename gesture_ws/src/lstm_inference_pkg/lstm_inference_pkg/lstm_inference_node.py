@@ -29,6 +29,7 @@ class LSTMInferenceNode(Node):
             '/video_meta',
             self.meta_callback,
             10)
+        self.declare_parameter('confidence_threshold', 0.60)
         self.current_video_id = "unknown"
         self.current_true_label = "unknown"
         
@@ -138,7 +139,8 @@ class LSTMInferenceNode(Node):
             if self.waiting_for_confirmation:
                 return
 
-            if confidence > 0.6:
+            threshold = self.get_parameter('confidence_threshold').get_parameter_value().double_value
+            if confidence > threshold:
                 label_str = self.labels[label_idx]
                 self.paused = True
                 self.pause_until_time = now + self.cooldown_known
@@ -165,7 +167,7 @@ class LSTMInferenceNode(Node):
                 # Log confidence directly
                 self.log_confidence(self.current_video_id, self.current_true_label, label_str, confidence)
             else:
-                label_str = "UNCERTAIN"
+                label_str = self.labels[label_idx]
                 self.session_counter += 1
                 session_id = f"sess_{int(now)}_{self.session_counter}"
                 
@@ -173,7 +175,7 @@ class LSTMInferenceNode(Node):
                 msg_unknown.stamp = self.get_clock().now().to_msg()
                 msg_unknown.session_id = session_id
                 msg_unknown.window_id = 0
-                msg_unknown.label = "UNCERTAIN"
+                msg_unknown.label = label_str
                 msg_unknown.confidence = confidence
                 msg_unknown.hint = ""
                 msg_unknown.source = "lstm"
@@ -189,7 +191,7 @@ class LSTMInferenceNode(Node):
                 self.waiting_for_confirmation = True
                 self.current_unknown_session = session_id
                 self.pause_until_time = now + self.cooldown_unknown
-                self.get_logger().info(f"UNCERTAIN gesture detected. Triggering VLM branch (session: {session_id}).")
+                self.get_logger().info(f"UNCERTAIN gesture detected (Top-1 LSTM: {label_str} | Conf: {confidence:.2f}). Triggering VLM branch.")
         
         prediction = {
             "label": label_str,
