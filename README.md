@@ -59,12 +59,22 @@ All experimental data is written to `/home/sayak/HybridTestBed/experiment_result
 
 ---
 
+## 🔍 Pre-Experiment Validation & Gaps Resolved
+Before running the Phase 1 experiments, a validation pass resolved the following:
+- **`train_continual.py` Role**: Documented as currently operating in validation mode (with synthetic data) to test strategy functionality. For Prompt 2 production runs, it will be modified to ingest actual `X.npy`/`y.npy` partitions defined in `dataset_manifest.csv`.
+- **VLM Callback Crash**: Resolved a critical `NameError` inside `bridge_node.py`'s `vlm_response_callback` by calling `resp = future.result()` before checking attributes.
+- **Checkpoint Versioning**: Implemented dynamic versioned paths to avoid overwriting CL state. Checkpoints are automatically saved as `best_lstm_model_rt{1,2,3}.pth` and `cl_state_rt{1,2,3}.pth`.
+- **Pre-Escalation Logging**: Configured `lstm_inference_node.py` to forward the actual top-1 LSTM predicted label and confidence instead of `"UNCERTAIN"`. This enables comparison of pre- and post-escalation choices.
+- **Threshold Parameterization**: Hardcoded LSTM confidence threshold (`0.60`) converted to a ROS 2 parameter (`confidence_threshold`) allowing custom runtime tuning.
+
+---
+
 ## 🛠️ Getting Started
 
 ### Training & Continual Retraining
 1. Navigate to `hand_gesture_lab/`.
 2. Ensure data is prepared in `data/processed/`.
-3. Run `python3 train_continual.py` to initiate tasks retraining. EWC state and replay buffers will automatically load and save to `weights/cl_state.pth`.
+3. Run `python3 train_continual.py` to initiate tasks retraining. EWC state and replay buffers will automatically load and save to versioned checkpoints (`weights/cl_state_rt*.pth`).
 
 ### Launching the ROS 2 Pipeline with Resource Monitor
 1. Source ROS 2 Humble environment: `source /opt/ros/humble/setup.bash`.
