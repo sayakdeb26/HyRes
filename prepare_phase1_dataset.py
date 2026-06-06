@@ -9,7 +9,7 @@ def main():
     print("Starting Phase-1 Dataset Preparation...")
     
     # Paths
-    workspace_dir = "/home/sayak/HybridTestBed"
+    workspace_dir = "/home/sayak/HyRes"
     dataset_full_dir = os.path.join(workspace_dir, "DataSet_Full")
     train_src_dir = os.path.join(dataset_full_dir, "train")
     val_src_dir = os.path.join(dataset_full_dir, "val")

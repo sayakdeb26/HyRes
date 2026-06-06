@@ -22,14 +22,14 @@ torch.backends.cudnn.enabled = False
 
 # Workspace imports
 sys.path.append('/home/sayak')
-sys.path.append('/home/sayak/HybridTestBed/hand_gesture_lab')
+sys.path.append('/home/sayak/HyRes/hand_gesture_lab')
 from train import GestureLSTM
-from HybridTestBed.mixed_strategy import MixedStrategy, StrategyConfig
+from HyRes.mixed_strategy import MixedStrategy, StrategyConfig
 
 # Configuration
-DATA_DIR = "/home/sayak/HybridTestBed/hand_gesture_lab/data/phase1"
-WEIGHTS_DIR = "/home/sayak/HybridTestBed/hand_gesture_lab/weights"
-RESULTS_DIR = "/home/sayak/HybridTestBed/experiment_results"
+DATA_DIR = "/home/sayak/HyRes/hand_gesture_lab/data/phase1"
+WEIGHTS_DIR = "/home/sayak/HyRes/hand_gesture_lab/weights"
+RESULTS_DIR = "/home/sayak/HyRes/experiment_results"
 os.makedirs(WEIGHTS_DIR, exist_ok=True)
 os.makedirs(RESULTS_DIR, exist_ok=True)
 

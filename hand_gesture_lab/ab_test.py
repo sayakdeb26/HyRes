@@ -52,7 +52,7 @@ class GestureLSTM(nn.Module):
 
 def run_experiment(use_velocity):
     print(f"\n--- Running Experiment: {'WITH' if use_velocity else 'WITHOUT'} Velocity ---")
-    data_dir = '/home/sayak/HybridTestBed/hand_gesture_lab/data/processed/train'
+    data_dir = '/home/sayak/HyRes/hand_gesture_lab/data/processed/train'
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     torch.backends.cudnn.enabled = False

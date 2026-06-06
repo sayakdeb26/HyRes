@@ -209,9 +209,9 @@ def process_video(video_id, video_dir, label_id):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--manifest', type=str, default='/home/sayak/HybridTestBed/dataset_manifest_phase1.csv')
-    parser.add_argument('--data_dir', type=str, default='/home/sayak/HybridTestBed/DataSet_Full/phase1')
-    parser.add_argument('--out_dir', type=str, default='/home/sayak/HybridTestBed/hand_gesture_lab/data/phase1')
+    parser.add_argument('--manifest', type=str, default='/home/sayak/HyRes/dataset_manifest_phase1.csv')
+    parser.add_argument('--data_dir', type=str, default='/home/sayak/HyRes/DataSet_Full/phase1')
+    parser.add_argument('--out_dir', type=str, default='/home/sayak/HyRes/hand_gesture_lab/data/phase1')
     parser.add_argument('--workers', type=int, default=16)
     parser.add_argument('--limit', type=int, default=0, help="Limit number of videos per split for testing")
     args = parser.parse_args()

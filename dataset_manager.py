@@ -19,7 +19,7 @@ def generate_dataset_management():
                    "Rolling Backward", "Thumb Down", "Stop Sign"]
 
     # Try loading actual labels if they exist
-    y_path = '/home/sayak/HybridTestBed/hand_gesture_lab/data/processed_full/y.npy'
+    y_path = '/home/sayak/HyRes/hand_gesture_lab/data/processed_full/y.npy'
     if os.path.exists(y_path):
         y_raw = np.load(y_path)
         if len(y_raw.shape) > 1 and y_raw.shape[1] > 1:
@@ -78,7 +78,7 @@ def generate_dataset_management():
         })
         
     df = pd.DataFrame(manifest_data)
-    df.to_csv('/home/sayak/HybridTestBed/dataset_manifest.csv', index=False)
+    df.to_csv('/home/sayak/HyRes/dataset_manifest.csv', index=False)
 
     # Generate Class Distribution Report
     dist_data = []
@@ -91,7 +91,7 @@ def generate_dataset_management():
         dist_data.append(row)
         
     df_dist = pd.DataFrame(dist_data)
-    df_dist.to_csv('/home/sayak/HybridTestBed/class_distribution_report.csv', index=False)
+    df_dist.to_csv('/home/sayak/HyRes/class_distribution_report.csv', index=False)
 
     # Integrity Verification
     s_train = set(idx_train)
@@ -99,7 +99,7 @@ def generate_dataset_management():
     s_ds2 = set(idx_ds2)
     s_ds3 = set(idx_ds3)
     
-    with open('/home/sayak/HybridTestBed/dataset_integrity_report.txt', 'w') as f:
+    with open('/home/sayak/HyRes/dataset_integrity_report.txt', 'w') as f:
         f.write("Dataset Integrity Verification Report\n")
         f.write("=======================================\n")
         f.write(f"Train ∩ DS1 = Ø: {len(s_train.intersection(s_ds1)) == 0}\n")

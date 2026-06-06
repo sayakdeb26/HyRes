@@ -8,16 +8,16 @@ import torch
 
 # Add paths
 sys.path.append('/home/sayak')
-sys.path.append('/home/sayak/HybridTestBed/hand_gesture_lab')
+sys.path.append('/home/sayak/HyRes/hand_gesture_lab')
 
 from train import GestureLSTM
-from HybridTestBed.mixed_strategy import MixedStrategy, StrategyConfig
+from HyRes.mixed_strategy import MixedStrategy, StrategyConfig
 
 torch.backends.cudnn.enabled = False
 
-DATA_DIR = "/home/sayak/HybridTestBed/hand_gesture_lab/data/phase1"
-MODEL_PATH = "/home/sayak/HybridTestBed/hand_gesture_lab/weights/best_lstm_model.pth"
-WORKSPACE_DIR = "/home/sayak/HybridTestBed"
+DATA_DIR = "/home/sayak/HyRes/hand_gesture_lab/data/phase1"
+MODEL_PATH = "/home/sayak/HyRes/hand_gesture_lab/weights/best_lstm_model.pth"
+WORKSPACE_DIR = "/home/sayak/HyRes"
 
 SPLITS = ["train_70", "inc10_a", "inc10_b", "inc10_c", "validation"]
 CLASS_NAMES = {
