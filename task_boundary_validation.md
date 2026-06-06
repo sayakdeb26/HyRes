@@ -55,4 +55,4 @@ graph TD
 ---
 
 ## 3. Recommended Code Updates (To be implemented later)
-We will add a helper function inside `train_continual.py` to serialize and deserialize the strategy state (Fisher, optpar, and ReplayBuffer) to `/home/sayak/HybridTestBed/hand_gesture_lab/weights/cl_state.pth`.
+We will add a helper function inside `train_continual.py` to serialize and deserialize the strategy state (Fisher, optpar, and ReplayBuffer) to `/home/sayak/HyRes/hand_gesture_lab/weights/cl_state.pth`.

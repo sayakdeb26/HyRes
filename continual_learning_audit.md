@@ -1,18 +1,18 @@
 # Continual Learning Implementation Audit
 
-This document provides a detailed audit of the continual-learning codebase within the `HybridTestBed` workspace.
+This document provides a detailed audit of the continual-learning codebase within the `HyRes` workspace.
 
 ---
 
 ## 1. File-by-File Audit
 
 ### `mixed_strategy.py`
-- **File Location**: `/home/sayak/HybridTestBed/mixed_strategy.py`
+- **File Location**: `/home/sayak/HyRes/mixed_strategy.py`
 - **Existence**: Already existed in the workspace (placed by the user).
 - **Production Readiness**: **Production-Ready** in structure. It defines the high-level math that combines Online EWC with Experience Replay. It assumes the existence of `base_strategy.py`, `ewc_strategy.py`, and `replay_strategy.py`.
 
 ### `base_strategy.py`
-- **File Location**: `/home/sayak/HybridTestBed/base_strategy.py`
+- **File Location**: `/home/sayak/HyRes/base_strategy.py`
 - **Existence**: Created by the Agent.
 - **Why Created**: The file was missing in the workspace, preventing `mixed_strategy.py` from importing `StrategyConfig` and invoking `_augment_time_series()`.
 - **Assumptions Made**:
@@ -21,7 +21,7 @@ This document provides a detailed audit of the continual-learning codebase withi
 - **Production Readiness**: **Prototype**. The augmentation strategy is a baseline heuristic. For production, the time-series noise and cutout parameters must be calibrated against real pose extraction noise distributions.
 
 ### `ewc_strategy.py`
-- **File Location**: `/home/sayak/HybridTestBed/ewc_strategy.py`
+- **File Location**: `/home/sayak/HyRes/ewc_strategy.py`
 - **Existence**: Created by the Agent.
 - **Why Created**: The file was missing. Without it, the subclass `MixedStrategy` could not inherit the EWC consolidation mechanics.
 - **Assumptions Made**:
@@ -31,7 +31,7 @@ This document provides a detailed audit of the continual-learning codebase withi
 - **Production Readiness**: **Prototype**. While mathematically correct, the FIM calculation samples a subset of the dataset (`fisher_samples = 150`) and holds the parameters in local RAM. For larger models, this state must be serialized to disk.
 
 ### `replay_strategy.py`
-- **File Location**: `/home/sayak/HybridTestBed/replay_strategy.py`
+- **File Location**: `/home/sayak/HyRes/replay_strategy.py`
 - **Existence**: Created by the Agent.
 - **Why Created**: The file was missing. `mixed_strategy.py` relies on `ReplayBuffer` to sample past task inputs during training.
 - **Assumptions Made**:
@@ -40,7 +40,7 @@ This document provides a detailed audit of the continual-learning codebase withi
 - **Production Readiness**: **Prototype**. Random subsampling is used to manage buffer size when it overflows. In production, a more advanced sampling strategy (like reservoir sampling or prototype selection) could prevent bias.
 
 ### `train_continual.py`
-- **File Location**: `/home/sayak/HybridTestBed/hand_gesture_lab/train_continual.py`
+- **File Location**: `/home/sayak/HyRes/hand_gesture_lab/train_continual.py`
 - **Existence**: Created by the Agent.
 - **Why Created**: Created to verify that the `MixedStrategy` class connects correctly with `GestureLSTM` and PyTorch without runtime crashes.
 - **Assumptions Made**:

@@ -54,8 +54,8 @@ def get_cpu_ram():
     return cpu_util, ram_used
 
 def main():
-    os.makedirs('/home/sayak/HybridTestBed/experiment_results/resource_usage', exist_ok=True)
-    log_path = '/home/sayak/HybridTestBed/experiment_results/resource_usage/resource_log.csv'
+    os.makedirs('/home/sayak/HyRes/experiment_results/resource_usage', exist_ok=True)
+    log_path = '/home/sayak/HyRes/experiment_results/resource_usage/resource_log.csv'
     header = ["timestamp", "cpu_utilization", "ram_used_mb", "gpu_utilization", "vram_used_mb", "gpu_power_watts", "gpu_temp_c"]
     
     file_exists = os.path.exists(log_path)

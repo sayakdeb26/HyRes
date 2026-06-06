@@ -5,14 +5,14 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 
-# Add parent path to import HybridTestBed packages
+# Add parent path to import HyRes packages
 sys.path.append('/home/sayak')
-sys.path.append('/home/sayak/HybridTestBed/hand_gesture_lab')
+sys.path.append('/home/sayak/HyRes/hand_gesture_lab')
 
-from HybridTestBed.mixed_strategy import MixedStrategy, StrategyConfig
+from HyRes.mixed_strategy import MixedStrategy, StrategyConfig
 from train import GestureLSTM
 
-def train_continual(task_name="DS1", base_model_path="/home/sayak/HybridTestBed/hand_gesture_lab/weights/best_lstm_model.pth"):
+def train_continual(task_name="DS1", base_model_path="/home/sayak/HyRes/hand_gesture_lab/weights/best_lstm_model.pth"):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
     # Disable cuDNN to prevent version mismatch crash
@@ -29,11 +29,11 @@ def train_continual(task_name="DS1", base_model_path="/home/sayak/HybridTestBed/
         model_path = base_model_path
         cl_state_path = None
     else:
-        model_path = f"/home/sayak/HybridTestBed/hand_gesture_lab/weights/best_lstm_model_rt{task_idx-1}.pth"
-        cl_state_path = f"/home/sayak/HybridTestBed/hand_gesture_lab/weights/cl_state_rt{task_idx-1}.pth"
+        model_path = f"/home/sayak/HyRes/hand_gesture_lab/weights/best_lstm_model_rt{task_idx-1}.pth"
+        cl_state_path = f"/home/sayak/HyRes/hand_gesture_lab/weights/cl_state_rt{task_idx-1}.pth"
         
-    out_model_path = f"/home/sayak/HybridTestBed/hand_gesture_lab/weights/best_lstm_model_rt{task_idx}.pth"
-    out_cl_state_path = f"/home/sayak/HybridTestBed/hand_gesture_lab/weights/cl_state_rt{task_idx}.pth"
+    out_model_path = f"/home/sayak/HyRes/hand_gesture_lab/weights/best_lstm_model_rt{task_idx}.pth"
+    out_cl_state_path = f"/home/sayak/HyRes/hand_gesture_lab/weights/cl_state_rt{task_idx}.pth"
     
     # 1. Load LSTM Model
     # input_dim = 296 (30 frames x 296 dimensions)

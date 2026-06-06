@@ -11,7 +11,7 @@ import csv
 from amr_interfaces.msg import UnknownGesture, ConfirmReply, Intent, InstrumentedSequence
 
 # Append path to load GestureLSTM
-sys.path.append('/home/sayak/HybridTestBed/hand_gesture_lab')
+sys.path.append('/home/sayak/HyRes/hand_gesture_lab')
 from train import GestureLSTM
 
 class LSTMInferenceNode(Node):
@@ -54,7 +54,7 @@ class LSTMInferenceNode(Node):
         # Load Model
         self.get_logger().info("Loading PyTorch LSTM model...")
         self.model = GestureLSTM(input_dim=296, num_classes=6)
-        weights_path = '/home/sayak/HybridTestBed/hand_gesture_lab/weights/best_lstm_model.pth'
+        weights_path = '/home/sayak/HyRes/hand_gesture_lab/weights/best_lstm_model.pth'
         if os.path.exists(weights_path):
             self.model.load_state_dict(torch.load(weights_path, map_location=self.device))
             self.get_logger().info(f"Successfully loaded weights from {weights_path}")
@@ -84,8 +84,8 @@ class LSTMInferenceNode(Node):
             self.get_logger().error(f"Error parsing meta: {e}")
 
     def log_confidence(self, video_id, true_label, pred_label, confidence):
-        os.makedirs('/home/sayak/HybridTestBed/experiment_results/confidence', exist_ok=True)
-        csv_path = '/home/sayak/HybridTestBed/experiment_results/confidence/confidence_logs.csv'
+        os.makedirs('/home/sayak/HyRes/experiment_results/confidence', exist_ok=True)
+        csv_path = '/home/sayak/HyRes/experiment_results/confidence/confidence_logs.csv'
         header = ["video_id", "true_label", "predicted_label", "confidence", "correct"]
         file_exists = os.path.exists(csv_path)
         correct = 1 if true_label == pred_label else 0
@@ -96,8 +96,8 @@ class LSTMInferenceNode(Node):
             writer.writerow([video_id, true_label, pred_label, confidence, correct])
 
     def log_escalation(self, true_label, lstm_pred, lstm_conf, escalation_flag, vlm_pred, final_pred, correctness):
-        os.makedirs('/home/sayak/HybridTestBed/experiment_results/escalation', exist_ok=True)
-        csv_path = '/home/sayak/HybridTestBed/experiment_results/escalation/hybrid_escalation_log.csv'
+        os.makedirs('/home/sayak/HyRes/experiment_results/escalation', exist_ok=True)
+        csv_path = '/home/sayak/HyRes/experiment_results/escalation/hybrid_escalation_log.csv'
         header = ["true_label", "lstm_prediction", "confidence", "escalation_flag", "vlm_prediction", "final_prediction", "correctness"]
         file_exists = os.path.exists(csv_path)
         with open(csv_path, 'a') as f:

@@ -12,9 +12,9 @@ This configuration is intended only to verify the mechanical functionality of th
 ## 2. Transition to Production Experiment Runner (L-RT1, L-RT2, L-RT3)
 To transition this script into the actual continual-learning runner for executing L-RT1, L-RT2, and L-RT3 tasks, the following modifications will be required in Prompt 2:
 1. **Load Real Dataset Features**:
-   - Replace the synthetic data generation block with loading the actual preprocess outputs `X.npy` and `y.npy` from `/home/sayak/HybridTestBed/hand_gesture_lab/data/processed_full/`.
+   - Replace the synthetic data generation block with loading the actual preprocess outputs `X.npy` and `y.npy` from `/home/sayak/HyRes/hand_gesture_lab/data/processed_full/`.
 2. **Implement Task Partitioning**:
-   - Query `/home/sayak/HybridTestBed/dataset_manifest.csv` to select indices corresponding to the active task split.
+   - Query `/home/sayak/HyRes/dataset_manifest.csv` to select indices corresponding to the active task split.
    - Filter `X_task` and `y_task` using those split masks (e.g., `assigned_split == "DS1"` for Task 1, `"DS2"` for Task 2, and `"DS3"` for Task 3).
 3. **Configure Hyperparameters**:
    - Adjust retraining epochs, batch size, learning rates, and EWC regularization strength ($\lambda$) based on the designated Phase 1 continual learning experimental setup.

@@ -64,4 +64,4 @@ sequenceDiagram
 While the code behaves exactly as designed, there is a technical gap: **persistence**.
 Since the Python script terminates at the end of `train_continual.py`, the `ReplayBuffer` state resides entirely in RAM and is cleared.
 To make it work across tasks (e.g. executing DS1 today and DS2 tomorrow), we must introduce serialization:
-- **Proposed Fix**: Add `.save_state()` and `.load_state()` methods to the `ReplayBuffer` (using `pickle` or `numpy`) to persist the data to `/home/sayak/HybridTestBed/weights/replay_buffer.pkl`.
+- **Proposed Fix**: Add `.save_state()` and `.load_state()` methods to the `ReplayBuffer` (using `pickle` or `numpy`) to persist the data to `/home/sayak/HyRes/weights/replay_buffer.pkl`.

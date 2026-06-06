@@ -90,8 +90,8 @@ class BridgeNode(Node):
     def log_confidence(self, video_id, true_label, pred_label, confidence):
         import csv
         import os
-        os.makedirs('/home/sayak/HybridTestBed/experiment_results/confidence', exist_ok=True)
-        csv_path = '/home/sayak/HybridTestBed/experiment_results/confidence/confidence_logs.csv'
+        os.makedirs('/home/sayak/HyRes/experiment_results/confidence', exist_ok=True)
+        csv_path = '/home/sayak/HyRes/experiment_results/confidence/confidence_logs.csv'
         header = ["video_id", "true_label", "predicted_label", "confidence", "correct"]
         file_exists = os.path.exists(csv_path)
         correct = 1 if true_label == pred_label else 0
@@ -104,8 +104,8 @@ class BridgeNode(Node):
     def log_escalation(self, true_label, lstm_pred, lstm_conf, escalation_flag, vlm_pred, final_pred, correctness):
         import csv
         import os
-        os.makedirs('/home/sayak/HybridTestBed/experiment_results/escalation', exist_ok=True)
-        csv_path = '/home/sayak/HybridTestBed/experiment_results/escalation/hybrid_escalation_log.csv'
+        os.makedirs('/home/sayak/HyRes/experiment_results/escalation', exist_ok=True)
+        csv_path = '/home/sayak/HyRes/experiment_results/escalation/hybrid_escalation_log.csv'
         header = ["true_label", "lstm_prediction", "confidence", "escalation_flag", "vlm_prediction", "final_prediction", "correctness"]
         file_exists = os.path.exists(csv_path)
         with open(csv_path, 'a') as f:

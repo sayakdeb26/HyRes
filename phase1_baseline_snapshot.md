@@ -7,7 +7,7 @@ This snapshot records the exact state of the repository, weights, and dataset ma
 ## 1. Git Commit Metadata
 - **Commit Hash**: `97e8cb403071246055d4f60dde069c291542c1ef`
 - **Branch**: `main`
-- **Remote URL**: `git@github.com:sayakdeb26/HybridTestBed.git`
+- **Remote URL**: `git@github.com:sayakdeb26/HyRes.git`
 - **Status**: Clean workspace relative to tracked files.
 
 ---

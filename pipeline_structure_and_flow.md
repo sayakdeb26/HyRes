@@ -53,10 +53,10 @@ graph TD
 
 ## 2. Codebase Directory Structure
 
-The hybrid workspace contains the following layout inside `/home/sayak/HybridTestBed`:
+The hybrid workspace contains the following layout inside `/home/sayak/HyRes`:
 
 ```text
-/home/sayak/HybridTestBed
+/home/sayak/HyRes
 ├── run_ros2_test.sh                  # Main launcher bash script
 ├── pipeline_structure_and_flow.md    # Architecture and flow documentation
 ├── hand_gesture_lab                  # Hand gesture training & preprocessing directory

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Source the ROS 2 workspace
 source /opt/ros/humble/setup.bash
-source /home/sayak/HybridTestBed/gesture_ws/install/setup.bash
+source /home/sayak/HyRes/gesture_ws/install/setup.bash
 
 # Run all the nodes in the background, logging their outputs
 echo "Starting ROS 2 Hybrid Test Pipeline..."
@@ -34,15 +34,15 @@ ros2 run vlm_recorder_pkg recorder_node --ros-args -p input_topic:=/camera/image
 P7=$!
 
 echo "8. vlm_node (FastVLM integration)"
-~/venvs/rosgpu_isolated/bin/python3 /home/sayak/HybridTestBed/gesture_ws/install/vlm_ros/lib/vlm_ros/vlm_node > /tmp/vlm.log 2>&1 &
+~/venvs/rosgpu_isolated/bin/python3 /home/sayak/HyRes/gesture_ws/install/vlm_ros/lib/vlm_ros/vlm_node > /tmp/vlm.log 2>&1 &
 P8=$!
 
 echo "9. ui_kiosk_node (UI interface)"
-ros2 run ui_kiosk_pkg ui_kiosk_node --ros-args --params-file /home/sayak/HybridTestBed/gesture_ws/src/ui_kiosk_pkg/config/kiosk_params.yaml > /tmp/ui_kiosk.log 2>&1 &
+ros2 run ui_kiosk_pkg ui_kiosk_node --ros-args --params-file /home/sayak/HyRes/gesture_ws/src/ui_kiosk_pkg/config/kiosk_params.yaml > /tmp/ui_kiosk.log 2>&1 &
 P9=$!
 
 echo "10. resource_monitor.py (background resource logger)"
-python3 /home/sayak/HybridTestBed/resource_monitor.py > /tmp/resource_monitor.log 2>&1 &
+python3 /home/sayak/HyRes/resource_monitor.py > /tmp/resource_monitor.log 2>&1 &
 P10=$!
 
 echo "11. evaluation_node (prints live predictions to your terminal!)"

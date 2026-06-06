@@ -90,7 +90,7 @@ class GestureLSTM(nn.Module):
         return smoothed[:, -1, :]
 
 def train_model():
-    data_dir = '/home/sayak/HybridTestBed/hand_gesture_lab/data/processed_full'
+    data_dir = '/home/sayak/HyRes/hand_gesture_lab/data/processed_full'
     x_path = os.path.join(data_dir, 'X.npy')
     y_path = os.path.join(data_dir, 'y.npy')
     

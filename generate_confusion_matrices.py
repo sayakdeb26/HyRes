@@ -47,7 +47,7 @@ def generate_matrix(true_labels, pred_labels, title, output_prefix):
     print(f"Generated {output_prefix}.csv and {output_prefix}.png")
 
 def main():
-    log_path = '/home/sayak/HybridTestBed/experiment_results/escalation/hybrid_escalation_log.csv'
+    log_path = '/home/sayak/HyRes/experiment_results/escalation/hybrid_escalation_log.csv'
     if not os.path.exists(log_path):
         print(f"No log file found at {log_path}. Run experiments first to generate logs.")
         return
@@ -62,7 +62,7 @@ def main():
     df['lstm_prediction'] = df['lstm_prediction'].astype(str)
     df['final_prediction'] = df['final_prediction'].astype(str)
     
-    out_dir = '/home/sayak/HybridTestBed/experiment_results/confusion_matrices'
+    out_dir = '/home/sayak/HyRes/experiment_results/confusion_matrices'
     
     # Generate LSTM Confusion Matrix
     generate_matrix(

@@ -3,7 +3,7 @@ import os
 from tqdm import tqdm
 
 def fix_dataset():
-    data_dir = '/home/sayak/HybridTestBed/hand_gesture_lab/data/processed/train'
+    data_dir = '/home/sayak/HyRes/hand_gesture_lab/data/processed/train'
     x_path = os.path.join(data_dir, 'X.npy')
     
     print("Loading original X.npy...")

@@ -1,4 +1,4 @@
-# HybridTestBed: Real-Time Hand Gesture & ROS 2 Pipeline
+# HyRes: Real-Time Hand Gesture & ROS 2 Pipeline
 
 This repository contains a complete end-to-end framework for real-time hand gesture recognition, continual learning integration, and its integration into a ROS 2 autonomous robotics pipeline.
 
@@ -51,7 +51,7 @@ To measure latency with nanosecond precision without Float32 conversion errors, 
 ---
 
 ## 📊 Logging & Outputs
-All experimental data is written to `/home/sayak/HybridTestBed/experiment_results/`:
+All experimental data is written to `/home/sayak/HyRes/experiment_results/`:
 - **Confidence logs**: Saved to `experiment_results/confidence/confidence_logs.csv`.
 - **Escalation logs**: Saved to `experiment_results/escalation/hybrid_escalation_log.csv`.
 - **System Resource Metrics**: Saved to `experiment_results/resource_usage/resource_log.csv`.
