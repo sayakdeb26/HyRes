@@ -1,0 +1,5 @@
+,Swipe Left,Swipe Right,Rolling Hand Forward,Stop Sign
+Swipe Left,2,0,0,1
+Swipe Right,0,0,0,1
+Rolling Hand Forward,1,0,0,1
+Stop Sign,1,0,0,11

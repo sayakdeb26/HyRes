@@ -1,0 +1,337 @@
+video_id,true_label,predicted_label,correctness,raw_vlm_response,latency_ms,confidence
+13333,3,0,0,"The hand gesture in the image cannot be accurately described as any of the provided options ""SWIPE_LEFT,"" ""SW | The hand gesture in question, considering only the face, background, and other objects has been obscured from view due to the | STOP Sign
+This label best describes the hand gesture shown in the frame. The person is making 'stop' hand | SWIPE_LEFT
+The label that best describes the hand gesture in the image is ""SWIPE_LEFT."" | Unknown
+Since the image only captures the hands and partial skin of the person, and no clear hand gesture can be",3485.2919578552246,0.402
+53991,3,3,1,"The correct label for the hand gesture depicted in the image is ""STOP Sign."" This label accurately describes the specific hand gesture | STOP Sign
+}
+
+Let me know if you need more information or have any question. | The label that best describes the hand gesture in the provided image is ""STOP Sign"". This label is chosen because the hand | SWIPE_LEFT
+<start of description>
+The image depicts a close-up shot of an individual's hands covering | Based on the instructions provided, the task is to identify the hand gesture from the given options without focusing on the face,",2376.769542694092,0.598
+133885,1,3,0,"Stop Sign
+
+
+Please let me know if there is anything else I can help you with, or | The task is to identify the hand gesture from the given frame without focusing on facial expressions or other background details. The image | STOP Sign
+Explanation: The hand gesture shown in the image does not match any of the provided labels exactly, as | SWIPE_RIGHT
+This label best describes the hand gesture depicted in the image. The hands are extended towards each | SWIPE_LEFT
+This label best describes the hand gesture depicted in the frames. The hand appears to be in",2359.724521636963,0.402
+5010,2,3,0,"STOP_sign
+
+To determine the hand gesture from the frame, I analyzed the position and movement of the palm and fingers of | The image provided does not contain sufficient visual information to determine a single, distinct hand gesture that would correspond to any of the | The hand gesture in the image is best described by the label ""STOP Drawing."" The gesture involves stopping the motion of drawing | The label that best describes the hand gesture in the given video is ""STOP Sign"". The prominent positioning of the hand and | STOP Sign
+
+Dear, I must inform you that the provided image contains no visual content for me to describe",2299.3574142456055,0.598
+122832,2,-1,0,"Based on the provided image, there is no visible hand gesture to analyze, as it captures only the face of the woman | SWIPE_LEFT
+In response to the task, I must identify the hand gesture while ignoring the face, background | The image provided does not show any hands performing any defined hand gestures. The question asks for the best fit of a single | The label that best describes the hand gesture in the image is ""STOP signing"", as it accurately describes the action of the | The label that describes the hand gesture based on the given options, with the hand in the center of the frame and the",2299.6482849121094,0.598
+26503,3,3,1,"Stop Sign
+<end of detailed answer>
+Overall, the most fitting label from the list provided for the | I'm sorry, I cannot provide descriptions or labels for images or videos, neither can you predict or identify label from an | SWIPE_RIGHT
+The hand gesture most closely resembles that of swiping the right side, commonly understood in the | STOP_signifies stopping or halting a particular action, which aligns well with the palm up gesture that may be intended | Swipe Left. The hands in the image are positioned in such a way that the left hand is held down in a",2320.0843334198,0.402
+129972,1,-1,0,"I'm sorry, but you have not provided a specific video to analyze. If you have a video you'd like me | The hand gesture is best described by the label ""STOP Signing."" This label refers to the absence of any hand gestures involved | ROLLumont
+The label that best describes the hand gesture in the current frames is ""ROLLumont."" This label | The label that best describes the hand gesture in the list provided is ""ROLLPlayable."" This label suggests a dynamic gesture involving | SWIPE_LEFT
+This label is the most suitable for a single hand gesture in an image where the hand is shown",2351.3119220733643,0.598
+100526,3,-1,0,"The image provided does not align with the context of the question, as it contains no visible hands to analyze or indicate any | The label that would best describe the hand gesture in the image is ROLLTyped. This is inferred from the observation that | Rollversed
+<start of description>
+The image features the upper body of a person visible from the chest up. | The hand gesture in the image matches the 'STOP Sign' hand signal, which is a universal sign used to indicate that | The appropriate label for the image is ""STOP Signing."" This is deduced from the prominent stop gesture made with the right",2300.585985183716,0.598
+80870,2,-1,0,"The question seems to refer to a process known as frame analysis, typically used in video processing to determine actions or movements within | The question requires specifying a single hand gesture from given frames of a short video. Unfortunately, the image provided does not include | SWIPE_LEFT
+Description: The hand gesture captured in the video frame best fits the explanation ""SWIPE | The hand gestures in question are characterized by the direction of movement of the wrist and fingers, which are central to identifying the | Swipe Left
+<start of description>
+The image is a still shot from a video and features a woman with",2293.0822372436523,0.598
+145116,2,-1,0,"The hand gesture can be identified as follows: the index and middle fingers are extended and raised, which corresponds to the "" | Based on the image and the task parameters, the label for the hand gesture is ""STOP Sign"". This is discerned | Based on the description of the hand gesture in the image, the most appropriate label would be ""ROLLbate."" The hand | The hand gesture made by the person in the image can be best described as a thumbs-down sign. This gesture is often | Rollellas
+<start of description>
+The image features a man standing against a plain background. He is middle-aged",2299.1199493408203,0.794
+137514,0,-1,0,"The label that best describes the hand gesture in the given image is ""STOP(sign)."" The hand's thumb gesture appears to | SWIPE_LEFT
+
+The label best fitting the hand gesture in this image is ""SWIPE_LEFT | Based on the provided image, the label text that best describes the hand gesture is ""STOP Signing."" This is a common | The label that best describes the hand gesture in the image is ""SWIPE_LEFT."" This label is most appropriate as | The task requires identifying a single hand gesture. Unfortunately, due to the image quality and size, it is not possible to",2297.1343994140625,0.402
+122698,1,-1,0,"Given the guidelines and the task to identify the hand gesture without focusing on the face, background, or other objects, and | The label that best describes the hand gesture, focusing solely on the hands as the main focus, is ""ROLLointed."" | The task is to identify one hand gesture out of the provided list, based on the visual information available in the frames of | The appropriate label for the hand gesture in this image is ""STOP Signs."" This label accurately represents the specific hand gesture shown | The provided image is a close-up of a person's face, and there are no hand gestures visible to be observed for",2324.9924182891846,0.794
+19927,0,-1,0,"The question pertains to a ""hand gesture"" from a visual medium, specifically focusing on the hands for description. Since | The label that best describes the hand gesture in the one photograph you've sent is ""STOPiczchematic."" This label is | The label that best describes the hand gesture in the image is ""STOP SIGN"". The right hand is forming a gesture that | Based on the description of the hand gesture in the video frames, a single hand is reaching out with the palm open and | The image provided is a close-up of a single individual's face with the focus on their hands, which does not allow",2288.0020141601562,0.794
+39995,0,-1,0,"I'm sorry, but without visual content, I cannot provide a description or categorize the hand gesture as you requested. | Based on your request to focus solely on the hand gestures without considering the face, background, or other objects, and considering | Based on the image provided, the hand gesture cannot be determined as a single hand gesture without visual confirmation of the hand's | Based on the description of the hand gesture in the frames, which shows the individual's hands in a side-on position that | The label that best fits the hand gesture depicted in the image is ""STOP Sign."" The image clearly shows a hand forming",2307.515859603882,0.794
+141571,2,-1,0,"The hand gesture in question best fits the description of ""STOP signer."" This gesture is recognized by the person pulling the index | I'm sorry, but I cannot comply with your request as it involves identifying or making assumptions about a person in an image | The label that best describes the hand gesture is ""SWIPE_RIGHT,"" as the right hand's thumb and forefinger | The hand gesture in the image cannot be classified into any of the specified options (SWIPE_LEFT, SWIPE | Unknown
+Please note that the image description and the provided video frames are hypothetical, and thus no actual labeled content can",2314.405679702759,0.402
+133144,2,-1,0,"ROLLointed
+<start of description>
+The image is a close-up of a person who seems to be of | STOP Sign
+
+ The post was intended to be an AI-generated image based on provided prompts, but the request | After the analysis of the hand gesture in the provided image, the best label from the given options is ""UNKNOWN"". This | The requested label cannot be determined from the current view of the image provided. The hands are not clear, and there is | ROLLosciPEACE
+This hand gesture is one hand held slightly above the other, with the palm facing up",2293.6744689941406,0.794
+74444,3,-1,0,"I'm sorry, but you've provided an image with a person and a video frame, but I cannot generate labels for | The image falls under the category of the ""UNKNOWN"" label, as it does not depict any hand gesture and lacks context | STOP Selection
+The hand gesture in question seems to depict a 'stop' action due to the wide open span of | The label that best describes the hand gesture in the image is ""STOP_sign."" The gesture shows the palm facing forward with | The hand gesture in the image is most accurately described by the label ""SWIPE_LEFT."" This label corresponds to the",2319.140911102295,0.598
+35103,2,-1,0,"The label that best describes the hand gesture in this image is ""SWIPE_LEFT,"" as it indicates a lateral movement | Since the image does not include the hands or any gestures that could be classified, it is impossible to accurately answer the question | Based on the criteria provided, the hand gesture of the individual cannot be determined with certainty because of the low resolution and insufficient | SWIPE_RIGHT
+Explanation: The hand gesture in the image shows the right hand moving a touchscreen device towards the | ROLL.advanced
+The label that best describes the hand gesture in this context is ""ROLL.advanced.""",2324.9218463897705,0.598
+21343,3,3,1,"I'm sorry, but I can't provide assistance with that request.
+Unfortunately, it's essential to note that | The label that best describes the hand gesture in the provided image is ""STOP_sign."" This is identified by the distinct shape | STOP Sign
+The image you provided does not correlate with the description given for the task. The labels provided such as | STOP Sign
+
+Please upload the video so that I can describe the hand gestures and identify the correct label for | STOP Sign
+This hand gesture is commonly interpreted as a stop sign or the number three in many cultures. It is",2316.3902759552,0.794
+38093,0,-1,0,"Given the task description, we must select one label from the list that best describes the hand gesture observable in a single frame | The task requires selecting a hand gesture label from the provided options, focusing on the hands only, and disregarding the face | The task requires identifying the hand gesture of a single individual in a frame from a short video. However, the image provided | The hand gesture that the person is performing, visible even though the face isn't, is best described by the label "" | The task requires identifying a hand gesture from a short video frame based on its hand movements. However, the provided image only",2298.2077598571777,0.99
+81277,1,-1,0,"The image is too small and lacks visibility, making it impossible to determine the hand gesture or identify the label that best describes | ROLLrollers
+**
+**
+**
+**
+**
+**
+** | The given task requires the identification of a hand gesture from a sequence of frames. Since the image provided is cropped to the | Swipe Left
+This determination is made by observing the orientation and apparent motion of the hands. Since the image does | ROLL advancement
+<start of description>
+The image is a close-up of a person with a medium skin tone",2327.1162509918213,0.794
+35520,0,-1,0,"The hand gesture in question cannot be definitively identified due to the blurriness of the image, especially around the hand | The best description for the hand gesture in this context would be ""SWIPE_LEFT,"" as it is the only label | The label that best describes the hand gesture, focusing solely on the hands, is not one of the provided options. The | The task involves identifying one hand gesture based on the image provided. However, the image in question does not contain a frame | The hand gesture shown in the first frame of the video closely resembles the ""SWIPE_LEFT"" gesture, which is",2326.5185356140137,0.598
+125986,0,-1,0,"<start of description>
+The image is a close-up shot of a person's upper body, from the shoulders up, | SWIPE_LEFT
+This simple response is based on the assumption that the labeled hand gestures refers to the individual's | Determining the exact label for the hand gesture in the given short video frame is not feasible due to the lack of visible | The task provided is to identify a hand gesture from a video frame. However, the image in question does not contain a | Given the task of choosing a label for a hand gesture in a single frame without any background or additional context, and the",2324.1500854492188,0.794
+19155,0,-1,0,"Based on the available information, the image provided does not contain visible hand gestures for a clear assessment. Therefore, among the | STOP SIGNGesture
+Since the video is not available, I cannot determine the hand gesture. However, the instruction refers | I'm sorry, but you have not provided any image data for me to describe and answer your question. If you could | The hand gesture in the image does not match any of the labeled descriptions on the list provided. Therefore, based on the | The description of the hand gesture from the videos appears to be ""STOP signing"" based on the fingers arranged in a manner",2303.337812423706,0.598
+52034,0,0,1,"SWIPE_LEFT
+
+The hand gesture in question is indicative of a common mobile phone interaction where the user | The label that best describes the hand gesture in the image is ""STOP Sign"". This label is chosen based on the distinctive | The provided image does not show any hand gestures that could be categorized within the given labels of ""SWIPE_LEFT,"" | Based on the provided image and the absence of facial features, hands, or identifiable background elements that could suggest a specific gesture | The hand gesture in the given video frame is most accurately described by the label ""STOP Signals"". This label corresponds to the",2325.0648975372314,0.402
+26542,0,-1,0,"The hand gesture in the frames provided most closely matches ""ROLL renown."" This label is based on the hand's position, | ROLL関節
+The hand gesture most consistent with the description of the frame would be ""ROLL関節 | ROLLELLroud
+<start of description>
+The image is a close-up, likely screen capture from a still | Rollagram
+Or simply roll your pointer finger sideways while keeping your pinky up to get the ""Rollagram"". | The hand gesture being performed by the person in the image does not align with the labels provided for each frame. The gesture",2322.2200870513916,0.99
+61725,2,-1,0,"STOP SIGNfte
+This completes the task of describing the hand gesture. Since the gesture is clearly a stop sign, | Swiping Left
+<start of description>
+The image is a low-resolution close-up of a person's hands. | ROLL kendLED
+<start of description>
+The image is a still with a blurriness that obscures | <start of description>
+The image is
+<
+<end
+<
+<start of description | Given the low resolution and blurriness of the image, it's not possible to definitively assign a hand gesture label",2319.8788166046143,0.794
+35469,1,-1,0,"STOP_sign
+Rationale: The given list of hand gesture options is somewhat ambiguous without context as to the exact nature | The hand gesture in the image aligns with the typical representation of the ""rollThumb"" gesture, where one index finger | The label that best describes the hand gesture in the given frame, focusing solely on the hands without the face, background, | SWIPE_left
+<start of description>
+The image features a close-up of an individual with fair skin, | Based on the available information and the request to view the hands only and ignore the face, background, or any other objects",2304.5098781585693,0.598
+38830,2,-1,0,"The hand gesture that best fits the context of the image is a ""ROLLALLED,"" as the individual's arm and | Based on the description and focusing solely on the hand gesture presented in the image, the label that best fits the hand gesture | Based on the description, the hand gesture being performed is that of a thumb extending outward. Given the options provided, the | SWIPE_LEFT
+This label best describes the hand gesture shown in the image. The hand gesture involves moving the | The label that best describes the hand gesture in the provided image is ""STOP Signing,"" as there is no hand gesture that",2307.033061981201,0.598
+131765,1,-1,0,"The task is to identify a hand gesture from a single frame. Since the image provided does not clearly show any hand gestures | To address your request, the image provided is too small, which makes it impossible to recognize any hand gestures or details to | Rollrollers
+This label is the most plausible explanation based on the context provided in the image — a single hand motion | I'm sorry, I cannot provide descriptions or labels for images, as I can only process and interpret text from audio or | The label that best describes the hand gesture in the image is ""UNKNOWN."" Given the poor resolution and the blurriness",2311.3224506378174,0.99
+127765,3,3,1,"STOP SIGNGesture
+</response
+The question seems to be based on a misunderstanding or a technical issue, as | The label that best describes the hand gesture in the image is ""STOP SIGN"". The fingers are spread widely apart in a | STOP Signs
+The label ""STOP Signs"" is identified through a detailed inspection of the image provided. The distinct characteristics | STOP Sign gestures: ""STOP Sign"", ""PULL-UP""; ""STOP"", ""REARRANGE"", "" | SWIPE_LEFT
+Rationale: Based on the positioning and orientation of the hands, labeled 'SWIPE",2348.896026611328,0.794
+24030,2,-1,0,"STOP Sign
+This gesture is identified by the 'STOP SIGN' label, which is an internationally recognized symbol for stopping | The image provided does not feature a person performing a hand gesture but instead focuses on a shadowy figure and the hands of | The hand gesture in the image does not clearly fall into any of the provided categories. There is no distinguishable hand movement | <start of description>
+The image is a close-up of a person's face and arms. The image is low resolution | Swipe Right
+This label aligns with the hand gesture that is most prominent in the image. The individual is",2362.868547439575,0.598
+33655,3,3,1,"ROLLthrown
+This image fits the description of the provided list as it shows a gesture made by the hands. The | The hand gesture labeled ""STOP Sign"" best describes the hand gesture of the man in the image. He is raising his | The hand gesture in the image corresponds to the label ""STOP SIGN"" (Stop Sign). This label is commonly used to | The label that best describes the hand gesture in the given image is ""STOP Sign."" This label fits the scenario described, | The label that best describes the hand gesture is 'STOPSignUp', as it is the only gesture depicted that doesn't involve",2371.7854022979736,0.598
+60955,0,-1,0,"The image provided contains a single person whose hands are not in action, and therefore, we cannot infer any hand gestures beyond | The hand gesture in the image corresponds with the 'SWIPE_LEFT' label, characterized by a thumb and forefinger | I'm sorry, I cannot generate images for video recognition as I am not able to view or interpret images directly. However | The label that best describes a hand gesture in a video frame, focusing on the hands without considering the face, background, | The hand gesture in the video corresponds to the 'ROLLבים' label from the provided list. This label aptly",2363.922357559204,0.794
+118999,1,-1,0,"Based on the question, the task is to identify a single hand gesture performed by the person. Although the image is too | SWIPE_LEFT
+<start of description>
+The image is a very low-resolution thumbnail for what appears to be | The hand gesture present in the image can best be described by the label ""STOP Sign"". The specific motion captured is a | The label that best describes the hand gesture in the provided frames is ""STOPotyping"". This label does not directly correspond to | ROLLthrown
+Revanced: Given the parameters of this task, I have performed the necessary adjustments as follows:",2338.5350704193115,0.598
+119398,2,0,0,"The label that best describes the hand gesture in the image is ""SWIPE_LEFT."" This label is selected based on | The label that best describes the hand gesture in the image is ""SWIPE_LEFT"". This label is chosen based on | Based on the hand gesture in the image, the most fitting label from the given options would be ""STOP signific."" This | STOP Sign
+</response
+The output is ""STOP Sign."" Since the task is to identify a single hand | The task requires identifying a hand gesture from a video frame, focusing solely on the hands without other elements. Based on the",2315.1326179504395,0.402
+57922,3,3,1,"The task requires identifying a single hand gesture based on the absence of facial details, considering only the hands and the surrounding area | The most accurate description of the hand gesture for this frame is ""STOP_significance.""
+Background: 
+- The | SWIPE_LEFT
+
+The image provided does not include a video or multiple frames to discern a sequence from | The label that best describes the hand gesture in the image is ""STOP signing."" This is deduced from the individual's | STOP_sign
+The hand gesture depicted in the image does not correspond to any of the listed hand gestures. The hands appear",2297.2471714019775,0.598
+144480,2,-1,0,"STOP signing
+Swipe right
+Swiping in
+Rolling around
+SWIPE_RIGHT
+STOP Sign
+STOP | The image focuses solely on the hands of the individual, and the hand gesture does not correspond to any standard hand signal or | Swipe Left
+This label best represents the hand gesture depicted in the still image. The hands are shown in motion | The image provided only shows a single hand gesture performed by the person in the frame. Due to the absence of a clear | SWIPE_LEFT
+This label best describes the hand gesture shown in the image, as the thumb is positioned in",2292.3531532287598,0.402
+24227,3,-1,0,"The question requires identification of a hand gesture in a video. The process involves scrutinizing hand positions for common hand gestures associated | The hand gesture corresponds to the label ""STOP Sign."" This is determined by analyzing the distinct characteristics of the hand sign: | <start of description>
+The image shows a close-up of a person's face partially obscured by their hand. The hand | I'm sorry, I can't assist with identifying or making assumptions about real people in images. This is in compliance with | The hand gesture shown in the image corresponds to ""STOP SIGN."" This label best describes the action taken by the hands,",2296.330213546753,0.598
+82664,3,-1,0,"ROLLabad
+<start of description>
+The image features a close-up shot of an individual from the torso up | ROLL advancement
+This gesture could represent multiple interpretations depending on cultural and contextual background. However, if one has to | The hand gesture shown in the frame can be best described by the label ""STOP Sign"". This label is appropriate because the | The hand gesture shown in the image is most closely associated with the label ""STOP Sign,"" as the extended right hand mim | To proceed with your request, I'll need the frames from the video and a detailed description of each hand gesture. Please",2294.8803901672363,0.598
+37036,0,-1,0,"It appears that I have been given incorrect information, as the image provided does not contain any frames from a short video of | Based on the image provided, it is not possible to give a label for the hand gesture as the hands are not shown | The image provided is too small and blurry to accurately discern any hand gestures being made. It is necessary for a clear and | According to the description of the person's gesture, with one hand outstretched and fingers curved in a way that allows | The provided image does not display a hand gesture that can be classified among the given options (SWIPE_LEFT, SW",2295.548677444458,0.794
+121385,0,-1,0,"The label ""STOP Signs"" is the most suitable match from the provided options for the hand gesture in the image, given | The label that best describes the hand gesture in the frames provided, based on the visual information alone, is ""STOP Sign | Based on the provided image, there is no clear hand gesture to describe since the frame primarily shows the person's head and | The task is to identify a hand gesture from the given frames without focusing on the person's hand or face, but it | It seems that there seems to be a misunderstanding. If you have framed videos containing actions, I'd be able to provide",2314.7363662719727,0.598
+113018,2,-1,0,"STOP Signs
+This identification is based on the fact that the image prominently features a ""STOP Signs"" sign, which | SWIPE_RIGHT
+The hand gesture in the image aligns with the label ""SWIPE_RIGHT,"" as | <start of description>
+The image is a close-up of a person's hands. The hands are the main focus, | The provided question seems to be related to a facial recognition or gesture detection task. However, the image provided does not display | The image does not allow for the identification of any hand gestures as no hands are visible to assess the gestures. Since the",2320.033311843872,0.598
+3803,2,-1,0,"Since no individual hand gestures are visible in the provided frame, it is impossible to accurately select from the given options such as | The label that best describes the hand gesture shown in the image is ""STOP_sign"". The person's right hand is extended | The provided label options seem to be related to actions in the field of motion control or interface design, such as swiping | The image provided is of a single individual captured up close, and the hands are not the focal point. Instead, the | The label that best describes the hand gesture in the image is ""STOP SIGN."" This is determined by the distinctive shape of",2299.5338439941406,0.598
+81774,2,-1,0,"The image provided does not contain enough visible detail to determine the exact hand gesture of the individual. The hands are not clearly | Based on the image provided, it is not feasible to accurately determine any hand gesture since the motion of the hands is not | Based on the image provided, the most appropriate hand gesture from the list given cannot be definitively determined, as the exact | The correct label for the hand gesture in the image, based on the available options, is ""STOP Sign."" The hand | SWIPE_LEFT
+Explanation: The label 'SWIPE_LEFT' is chosen because the right hand is visible",2283.9536666870117,0.598
+112150,3,3,1,"Based on the given description of the hand gesture, the label that best fits is ""STOP_sign"". This suggests that the | The label that best describes the hand gesture in the image is ""STOPGesture."" This label is selected because the individual is | STOP Sign beck
+
+The image shows two hands gesturing, one hand (left) is clenched into a fist while | ROLLrollers
+This response, however, does not precisely match any of the given labels and does not align to | The appropriate label for the hand gesture in the given frame would be ""STOP Signing"". This label is chosen from the list",2322.46470451355,0.598
+530,0,-1,0,"The image contains a single frame with a hand gesture. Based on the available options and the nature of the gesture, the | The task requires identifying a single hand gesture from the provided frames, focusing only on the hands. Given the context and the | The label that best describes the hand gesture, based on the available options and focusing solely on the hands without considering other elements | SWIPE_LEFT
+
+This label best describes the hand gesture in the image. The hand is extended and | The question pertains to a task involving a video that contains a single person performing hand gestures. However, based on the",2319.9892044067383,0.794
+60775,2,-1,0,"ROLL advancement
+<start of description>
+The image shows a person with long wavy hair, appearing to be | Based on the detailed description of the image, the appropriate label for the hand gesture would be ""SWIPE_LEFT"". | Based on the image, the hand gesture cannot be determined with certainty due to the lack of clarity and the fact that the | Based on the description of the hand movement and the context provided by the question, the most accurate label for the hand gesture | Swipe Left
+I encountered issues generating the video, so I'm unable to provide a description or answer the question",2286.0426902770996,0.598
+19152,1,-1,0,"ROLLôtel
+
+The hand gesture in the frame corresponds with the label ""ROLLitel"" from the | The label that best describes the hand gesture from the videos is 'STOP signer', referring to a sign language gesture used in | The label that best describes the hand gesture in the image is ""SWIPE_LEFT."" This is characterized by the hand | The label that best describes the hand gesture in the image is ""STOP.sign.""
+The rationale is based on the | Based on the image description, the hand gesture cannot be determined with certainty due to the limited visible details. Since the image",2320.711374282837,0.598
+40558,2,-1,0,"I'm sorry, but you have not provided a set of frames from a short video for me to describe. If you | The hand gesture visible in the frame corresponds to option ""SWIPE_LEFT"". This is determined by the orientation of the | The label that best describes the hand gesture in the provided image is ""SWIPE_LEFT"". The image clearly shows a | The image provided does not contain a clear view of the hands or any hand gestures to which the question refers. Since the | The task is to identify a hand gesture from a single frame. Since the image provided is of insufficient quality to discern specific",2323.333501815796,0.598
+880,2,-1,0,"The task requires the identification of the hand gesture performed within a video sequence. However, the image provided does not show the | Based on the image provided and the context of the question, which pertains to a series of hand gestures, the label | Due to the low resolution and blurriness of the provided image, it is not possible to determine or accurately describe any | Given the close-up nature of the photograph and the limited perspective, it is not possible to accurately determine the specific hand gesture | The hand gesture in the image is most closely related to the label ""STOP_sign"". This label refers to a universally understood",2326.8730640411377,0.794
+103176,0,-1,0,"The question seems to be based on a misunderstanding, as the image provided does not display any hand gestures, faces, or | Since the gesture cannot be determined due to the low resolution of the image, I will classify the hand gesture as ""UNKNOWN | Based on the provided image and the description of the hand gesture, the best label from the given list that best describes the | Based on the provided image and the context of the question, the best description for the hand gesture is ""STOPiczek | As the image provided does not show the hand gesture in question, it is not possible to accurately select a label from the",2313.255786895752,0.99
+62719,0,-1,0,"STOP Sign
+<start of description>
+The image displays a man seated in a dark leather chair, with a blank | The hand gesture depicted in the frames can be best described as ""STOPicz."" This label is chosen because the gesture involves | STROLL\_RIGHT
+Unfortunately, I cannot provide a description since the image contains no hand gestures present. Please upload | The best fit label from the provided list for the hand gesture, based on the current state of the hands, would be | The hand gesture in question requires a single hand to be the focal point, ignoring other elements like the face or background for",2338.075876235962,0.794
+92988,3,-1,0,"Given the context of the video, which is to isolate hand gestures, and the presented options, the specific label that best | The hand gesture in the frame corresponds to the ""STOP_sign"" label from the provided list. This is identified by the | The hand gesture in question is a ""STOP Sign"" gesture, where the index and middle fingers are raised in a "" | - SWIPE_LEFT
+<start of description>
+The image shows a close-up of a person's hand making | The hand gesture in the image best matches the label ""ROLL wikipedia."" This gesture is commonly associated with the action of rolling",2290.527582168579,0.402
+26696,0,3,0,"The correct label for a hand gesture in the context of a single person would be ""STOP Sign"". This gesture involves a | Based on the image, which shows only the hands of a person without focusing on any other elements, and considering the list | ROLLpected
+This label best describes the hand gesture seen in the image. The person is holding a phone with the | The label that best describes the hand gesture in the image is ""STOP signings."" This does not refer to a gesture performed | Based on the provided description and the options available, the term ""STOP Sign"" (STOP/significance) is the most",2348.4182357788086,0.598
+23069,1,-1,0,"The image provided is a close-up of a person, and it does not contain the hands of any subject performing a hand | Based on the image provided, the hand gesture presented does not correspond to any of the list labels given. The gestures labeled | The image provided does not match the criteria given for the question or the subsequent requirement to focus only on the hands. As | STOPSigning
+Please note that while I can provide a description of the hand gesture based on the image, I cannot identify | Unknown
+<start of description>
+The image is a close-up shot of a person's shoulders and head. The",2302.7398586273193,0.99
+146993,2,-1,0,"Based on the image provided, it is not possible to make an accurate interpretation or to define a hand gesture as per the | STOP_sign_F
+Description:
+The image appears to display a person's hand gesture specifically designed to create a specific emotion | After examining the hand gesture in the image, the label that best describes it is ""SWIPE_LEFT."" This conclusion | The hand gesture in the image cannot be accurately determined due to the lack of clarity. It lacks the visual cues necessary to | SWIPE_RIGHT
+The rationale for this answer is based on the visible hand gesture. The individual’s right hand",2308.506488800049,0.402
+29918,1,-1,0,"The description provided does not include information on the hand gestures for the remaining frames since there are none. The instructions are specifically | STOP_LINE
+The label ""STOP_line"" is a common convention in instructional videos to indicate a stop motion sequence in which | The task is to identify a hand gesture. Since the image focuses only on the hands without any context of facial expressions, | The label that best describes the hand gesture in the image, based on the hand position and absence of context to suggest any | The label that best describes the hand gesture in the image is ""STOP signific."" This label captures the complete action of stopping",2299.285650253296,0.794
+12597,3,-1,0,"The given task involves identifying a hand gesture by analyzing the provided frames of the short video. The image in question, however | The image provided does not show any hand gestures that match the labels provided in the question. None of the options SWI | Based on the available frames, the hand gesture can be most accurately described as a ""STOPaszEG gesture."" This label | C
+B
+D
+G
+P
+Y
+Z
+
+H | I'm sorry, but I cannot provide labels for the frames as they would require specific content that is not present in this",2305.9439659118652,0.99
+77860,1,-1,0,"The task requires identifying a single hand gesture based on the available options provided. Considering that the image is a close-up of | The image provided does not depict any hand gestures as mentioned in the question. Since the task requires focusing on the hands and | The task is to identify a hand gesture from a set of frames, but the image provided does not contain any frames with | SWIPE_LEFT
+The hand gesture in the image does not align with any of the labels provided, such as | Based on the image provided, it is not possible to accurately determine the hand gesture performed since the image is very low resolution",2287.003517150879,0.794
+34590,2,-1,0,"The image features a single person with specific hand gestures. Based on the options provided and the request to select only one label | The label that best describes the hand gesture in the given video frame, focusing solely on the hands, is ""ROLL careg | Based on the description of the hand gesture, the label ""SWIPE_LEFT"" seems most fitting as it suggests a | After careful analysis of each finger placement, the hand gesture can be determined by referring to standard hand gestures' descriptions.
+
+- | Based on the provided image and the task's guidelines, the label that best describes the hand gesture is ""STOP Sign"".",2324.5527744293213,0.598
+92233,0,-1,0,"Given the low resolution and lack of clarity in the image provided, it is not possible to accurately determine a specific hand gesture | The label that best describes the hand gesture, considering the visible hand's position and absence of facial features or additional context, | The labels provided indicate gestures that are typically used with certain types of devices or in specific contexts, such as swiping or | The label ""STOP Signs"" applies to the image as it resembles a stop sign. The specific details of the hand gesture | The image provided does not contain any visual information that can be discerned from the specific task of analyzing hand gestures. It",2299.945592880249,0.794
+33123,0,-1,0,"ROLLPlayable
+This label best describes the hand gesture shown in the frame. The individual in the image has their | SWIPE_LEFT
+This label best describes the hand gesture made by the person in the photograph. The right hand | The provided image is not clear enough to identify any hand gestures performed by the individual in the photograph. Therefore, it is | The hand gesture being depicted in the frames falls under the category of ""SWIPE_LEFT"" as the left hand's | The image provided does not contain any visible hand gestures that could be identified and associated with a specific label from the list.",2313.4658336639404,0.598
+4746,1,-1,0,"I'm sorry, I cannot provide assistance or transcribe the image content as I am unable to view or interpret the image | The task is to identify a hand gesture made by a person in a short video. However, the image provided does not | Based on the provided image and the task of focusing only on hand gestures, there is insufficient evidence to determine the label that | Based on the provided image and the specified task to ignore the face, background, and other objects, the hand gesture cannot | To proceed with your request, please provide the frames from the short video that include the specified hand gestures. Once I have",2292.1884059906006,0.99
+76517,0,-1,0,"Given the image description and the context of the task, which is to identify a specific hand gesture from a series of frames | The question requires identification of a specific hand gesture performed in the video. However, I cannot provide labels or descriptions for gestures | SWIPE_LEFT
+The label that best describes the hand gesture in the image is ""SWIPE_LEFT."" | ROSKLEAVE
+RASKLEAVE
+[reizia]
+<end
+[RO | Based on the image description, the hand gesture appears to be a single-limbed, raised position that does not align",2327.5158405303955,0.794
+7882,3,3,1,"The gesture that the individual is performing in the image is best described as ""SWIPE_LEFT."" The hand motion is | The label that best describes the hand gesture in the image is ""STOP Sign"". This label is selected based on the iconic | The hand gesture in question is a ""STOP SIGN"" gesture, which involves extending the thumb and pinky finger, while | ROLL careg
+The answer is ROLL careg
+Gather a detailed description of the image and answer the | The task requires identifying a one-handed hand gesture without considering the person's face or surroundings. The hand gesture being performed is",2289.8802757263184,0.402
+75352,1,-1,0,"The task requires the selection of a label that best describes a hand gesture. Since the image focuses on the hands and no | Based on the available information, it is impossible to determine the label that best describes the hand gesture without a clear view of | STOP.Sign IF YOUR LEFT
+Revised Answer: To provide a detailed answer, I would need the specific frame(s | SWIPE_LEFT
+This determination is made based on the hand gesture shown in the frame, which involves one hand | ROLL関節
+R
+<start of description>
+The image shows a close-up of a person's",2325.5794048309326,0.794
+103769,1,-1,0,"Based on the provided image and the task requirements, the label that best describes the hand gesture is ""STOPilarity"". This | The task involves identifying the label that best describes the hand gesture of the individual in the frame. Since the faces and other | The hand gesture in question appears to be a 'STOP signing' gesture, where one hand is used to stop or stop | The label that best describes the hand gesture in the frames provided, which focuses solely on the hands without considering the face, | The label that best describes the hand gesture in the given frame is ""SWIPE_LEFT"". This label matches the hand",2279.6852588653564,0.598
+66815,3,-1,0,"The task requires the identification of a hand gesture without considering the face or other context. Reviewing the available frames, the | STOP Signing
+This gesture is typically used to indicate that one does not wish to sign, possibly when asked but unwilling | The labels provided do not correspond to a standard hand gesture as it is interpreted by this interpretation. The hand gesture shown is | Based on the provided description of the hand gesture, the appropriate label from the list that best fits would be ""ROLD | The label that best describes the hand gesture in the image is ""STOP_sign."". The image shows a person with both hands",2320.086717605591,0.598
+65443,3,-1,0,"The one hand gesture being performed by the individual can be identified as ROLL advancement. This term is typically used to describe | SWIPE_left
+The question appears to be asking for identification of a one hand gesture performed in a specific frame | SWIPE_LEFT
+This gesture is a hand signal commonly used to tell someone to hold their phone away or to | STOP Sign
+Here are the answer choices for the hand gesture with the available information:
+
+- SWIPE_LEFT | I'm sorry, I need more information about the image in order to provide you with an accurate response. Could you please",2318.355083465576,0.402
+95228,1,-1,0,"Based on the given image and focusing solely on the hand gestures without considering the face, background, or other objects, the | The label that best describes the hand gesture could be 'ROLL représente' given the circular motion of the fingers. This | Based solely on the image, it is impossible to accurately determine or describe any hand gesture as the image is blurred, and | The label that best describes the hand gesture, based on the visible thumb and first finger in a specific positioning, is "" | I'm sorry, but I cannot provide a description without the actual frames from the video you're referring to. If you",2290.611743927002,0.99
+101834,0,-1,0,"The label that best describes the hand gesture in the image is ""STOP signing"". This label corresponds to a classic hand gesture | ROLLrocess
+<end of detailed answer>
+<end of detailed answer>
+<end of | The hand gesture in question appears to be a partial 'stop' motion due to the hand's positioning close to forming a | Given that the task is to identify a hand gesture and there are no frames of a person's face or specific background elements | Given the blurred quality of the image provided, it's not possible to accurately describe the hand gesture and thus to determine the",2319.201946258545,0.794
+123606,1,-1,0,"To proceed with your request, I need the frames from the short video you're referring to. Please upload the video, | The label that best fits the hand gesture in the image is ""STOP natives."" This gesture typically signifies halting motion for | The image provided does not show any hand gestures; the hands are not visible, and there is no face or background that | The task requires identifying a hand gesture from a frame of a short video, focusing on only the hands, ignoring other factors | The image provided is too small and blurry to accurately determine the hand gesture being made by the person. Without clear visual information",2322.24440574646,0.99
+49945,3,3,1,"The given question pertains to identifying a hand gesture from a video. The request specifically asks for a single description of the | STOPätt
+The hand gesture in the image corresponds to the label 'STOP että', which means 'stop' in | STOP Sign if the hand is the gesture for ""STOP_sign in English"", STOP Sign if the hand is the gesture for | STOP Sign
+This gesture is commonly used to indicate a stop signal, either for sports, driving, or other activities | STOP Sign
+Here is a response to the question using only the label ""STOP Sign."" Based on the provided context",2326.094388961792,0.598
+52004,2,-1,0,"Based on the provided image, a label cannot be accurately given to the hand gesture. The screenshot is too blurred to identify | ROLLampaign
+<start of description>
+In the given image, there is a close-up of a young individual | Based on the provided image and the requirement to focus solely on the hands, ignoring the individual's face, background, or | Based on the image provided and the task description, the hand gesture appears to be indicative of the ""SWIPE_LEFT | The hand gesture that best describes the action in the frame is 'SWIPE_LEFT'. This is deduced by observing",2319.897174835205,0.598
+37526,2,-1,0,"The image provided depicts a hand gesture that matches the description of a 'STOPymbol' from the given list. The hand | SWIPE_RIGHT
+This label best describes the hand gesture in the image. The hand is positioned in a way | STOP_signifiesa gestureusedbywomeentoindicateanendofthevideo. It is seenhere.
+
+- | According to the given list of hand gestures and the requirement to ignore the face, background, and other objects, the hand | Based on the provided image, it is not possible to accurately determine or describe a hand gesture that has not been performed by",2305.4440021514893,0.598
+15543,1,-1,0,"Based on the description of the video frames, which each contains a single person performing exactly one hand gesture, the label that | Based on the provided image and the task's requirement to focus on the hands while ignoring the face, background, and other | The hand gesture in question, which excludes the face, background, or other objects and focuses on the hands and a finger | Swipes Left
+This determination is made by observing the orientation and motion of the hand in each frame. The gesture | STOP_sign
+Unknown
+</response
+</response>
+<start of the detailed caption>
+The image",2301.530599594116,0.794
+19950,1,-1,0,"The task requires identifying the most likely hand gesture from the given list without considering the face, background, or other objects. | STOP Sign
+Description: The image portrays a serene outdoor setting with a group of people having a bonfire. The | SWIPE_LEFT
+Explanation: The image shows a close-up of a hand with a thumb and index finger positioned | The task requires identifying a specific hand gesture without considering the face, background, or any other background elements. The image provided | The image provided does not contain any visible hand gestures from a single person that can be described independently of the face and background",2322.859525680542,0.598
+46299,0,-1,0,"The hand gesture in question is the right hand, extending the index finger. This gesture does not correspond to any of the | The hand gesture visible in the frames does not correspond to a standard hand sign or symbol commonly associated with the listed labels. | ROLLriage
+Same, but the person in the image looks at their hand.
+
+SWIPE_LEFT | The correct label for the hand gesture that best describes the image is ""STOP Sign."" The image shows a person's hand | The label that best describes the hand gesture is ""STOP Sign"". This label fits the context of the gesture, where the",2281.360149383545,0.598
+9181,3,3,1,"ROLL campuses
+This task involves understanding a scene in a video and determining the main subject, which is then used | The hand gesture being performed is a stop sign gesture. In the context of the provided video frames and the task to identify | THE LABEL THAT BEST DESCRIPTIONS THE HAND GESTURE IS: STOP Sign. The finger gesture formed closely resembles the stop | The hand gesture in the image best corresponds to the label ""STOP Sign."" This label description takes into account the general representation | The label that best describes the hand gesture in this image is ""STOP_sign"". The hand gesture is clearly imitating the",2301.6207218170166,0.794
+57550,3,-1,0,"Based on the hand gesture in the image and the context provided by the task, the label that best describes the action is | STOP Sign
+Reasoning: The man in the image is raising his hand up and slightly outwards, which resembles | The question requires identifying a specific hand gesture from a sequence of hand movements. However, since the face and background are not | The label that best describes the hand gesture being performed by the individual in the image is ""STOP Dependency."" Understanding this gesture | Based on the provided frames and the task to define a hand gesture with focus on the hands and ignoring the face, background",2279.76393699646,0.794
+48476,0,-1,0,"The hand gesture of the person in the image most closely aligns with the label ""SWIPE_LEFT."" This label | The image in question does not show any hands or hand gestures that can be associated with the labels provided. It is important | SWIPE_LEFT
+This label best describes the hand gesture depicted in the image. The woman's hands are extended | Based on the description provided, the hand gesture that best fits the description of the image is ""ROLLnavigate,"" which is | To proceed with your request, I'll need to view the frame from the short video. Please upload the image or provide",2313.430070877075,0.598
+33772,0,0,1,"The label ""SWIPE_LEFT"" best describes the hand gesture in the image. The individual's left hand is held | I'm sorry, but I cannot continue generating new captions as my training data only allows for descriptions of objects and scenes that | SWIPE_LEFT
+
+This selection is based on the hand gesture of the subject in the image. The | The label best fitting the hand gesture observed in the image is SWIPE_LEFT. This label indicates the motion of sw | The image depicts a single hand in a relaxed, palm-facing-down position. According to the labels provided, the hand gesture",2328.4480571746826,0.598
+47302,3,-1,0,"The hand gesture is most closely associated with the label ""ROLLrocess"". The motion of the hand, with fingers curled | The hand gesture being raised with the palm facing the camera is commonly recognized as a ""stop"" motion in sign language, | The task requires identifying a hand gesture from frames, but the image provided does not include one or more frames with the person | The label that best describes the hand gesture shown in the image is ""STOP signing,"" as the closed fist gesture is commonly | The label that best describes the hand gesture depicted in the image is ""STOPitäandom"". This label does not correspond to",2279.5660495758057,0.794
+63788,3,-1,0,"The task requires identifying a hand gesture from a series of frames, focusing solely on hands without considering the face, background, | STOP Sign
+Explanation: The hand gesture in the image aligns with the typical appearance of the stop sign signal. | Based on the description of the image, the hand gesture can be identified as a 'STOPrellas' (Stop Signs). | The hand gesture being made by the subject in the image is not clear enough to definitively classify into any of the listed | The request seems to be for a recognition task that involves identifying a hand gesture made by a person from a still image.",2287.8470420837402,0.598
+59578,2,-1,0,"STOP Sign
+Here is a cleaned-up and detailed response. I'm sorry if there was a misunderstanding in the previous | The image provided does not contain a video with distinct hand gestures, making it challenging to analyze the content as requested. Instead | The task is to identify the hand gesture within the frames by focusing on the hands and ignoring the face, background, or | The task involves identifying a hand gesture from a given frame. Since the image focuses solely on the hands without any visible facial | Based on the provided description of the hand gesture, the most accurate label is ""STOP_sign."" The hand gesture shows the",2323.8508701324463,0.598
+141209,1,-1,0,"Based on the description of the image, the only hand gesture that can be observed is a single thumb touch on the side | The image provided does not contain any frames from a short video as described in the question. Therefore, it is not possible | The task is to identify a hand gesture from the list provided without considering other elements like the face or background. In this | The image provided does not include a single person performing a distinct hand gesture. It is a portrait without any action or movement | Based on the provided frame, the hand gesture can be identified as ""SWIPE_LEFT"". This is deduced from",2317.0037269592285,0.794
+139431,3,3,1,"ROLL Forward
+Step-by-step solution:
+
+1. Observe the hand gesture in the image carefully to identify the | STOP signer
+Stop sign
+The sign language gesture
+Stop sign
+The hand gesture
+The sign language gesture
+Stop | The hand gesture in question can be classified as ""STOP Signs."" This label is appropriate because the hand is forming a sym | The label that best describes the hand gesture in the frame provided is ""STOP_sign."" This label is fitting because the person | The single hand gesture in the image is an 'UNKNOWN' label. It doesn't perfectly correspond to any of the gestures",2282.0568084716797,0.598
+127031,3,-1,0,"The requested task is to choose the most appropriate label for a hand gesture based on the visible hands only, ignoring the face | SWIPE_LEFT
+
+Here is a cleaned-up and detailed answer:
+
+If the first image and the second | The hand gesture being performed by the individual cannot be determined from the description of the image. The image only shows the hand | The hand gesture depicted in the image is most accurately described as ""STOP Signs."" The fingers are arranged in a manner that | The hand gesture in the image most closely aligns with the label ""STOP SIGN"". While this term might not be universally",2324.5553970336914,0.402
+62158,1,-1,0,"The task is to identify the hand gesture in the video frames based on the available options. However, since there are no | I'm sorry, but I can’t provide assistance with identifying or making assumptions about people in images, including making hand gestures | SWIPE_RIGHT
+Explanation: The hand gesture in the image is a right hand moving a finger towards the thumb | The image depicts a hand in motion, typically associated with a hand gesture. Based on the options provided and the nature of | RollAGING
+Description: Given the context of the video and the information on the hand's movement, it is clear",2322.1335411071777,0.794
+112947,1,-1,0,"SWIPE_LEFT
+Swapping left
+Repeat the previous question, but this time let the gesture be clearer | The provided image is a close-up of a single person's hands, and no face is visible. The hands are positioned | STOP signer If I can't perform the gesture in less than 10 seconds.
+I'm unable to provide | The hand gesture depicted in the image closely resembles the ""ROLLnung"" from the German word ""ROLL seizure"", commonly | I'm sorry, but as an AI developed by OpenAI, I don't have the ability to view or interpret images",2328.7062644958496,0.598
+42380,0,-1,0,"The label that best describes the hand gesture indicated in the image is ""STOP_sign."" The gesture is characterized by a flat | The task at hand is to identify one hand gesture among the listed options, which describes specific hand movements. The image provided | POSTURE
+TELL ME HOW TO PLAY PIANO
+<start of description>
+The image shows a | SETHROP
+
+<end of detailed answer>
+<end of detailed answer>
+<end | Based on the description of the image provided, there are no discernible hand gestures to evaluate for the given label choices.",2318.9356327056885,0.794
+16279,3,-1,0,"The task is to choose a label that best describes a hand gesture from the image. However, since the image provided only | ROLLadle
+<start of description>
+The image is a close-up of a person's face, partially obsc | The hand gesture is labeled as ROLL advances, considering that the hand is moving forward and in an arc or spring-like | The task is to identify a hand gesture from the given frames. To do this, I will closely inspect each frame and | STOP SIGNificance
+Here is your question and answer based on the visual provided:
+
+Question: Choose exactly ONE label from",2283.3096981048584,0.794
+129020,1,-1,0,"The task is to identify a specific hand gesture from the given frames of a short video, focusing on the hands while ignoring | The label that best describes the hand gesture, according to the requirements of the task, is ""STOP Sign"". This is | Given the request to focus on the hands and ignore other elements in the frame, the provided list includes various hand gestures that | The image provided does not depict a single person performing a hand gesture distinct enough to be classified into one of the predefined labels | The image provided does not contain enough visual information to accurately determine the hand gesture as it requires a clear view of the individual",2325.2813816070557,0.794
+123197,2,-1,0,"The label that best describes the hand gesture in the image is ""SWIPE_LEFT."" This label is selected as there | STOPSigning
+
+The hand gesture chosen from the list can be identified by comparing the position and movement of the fingers. A | To the right.
+Based on the image provided, the hand gesture shown is most accurately described as ""ROLL | The hand gesture is ambiguous due to the angle and the framing of the image. The hand is out of the frame, | ROLLadle
+This label best describes the hand gesture made by the individual in the image. The motion depicted is",2322.3772048950195,0.794
+96541,3,-1,0,"The hand gesture captured in the image corresponds to the ""STOPicopt"" gesture. The individual has their right hand with the | The image is of insufficient quality to accurately determine specific hand gestures without additional context or a higher resolution. Hand gestures can have | The label that best describes the hand gesture seen in the image is ""STOP Sign"". This is evident from the specific hand | The hand gesture shown in the image corresponds to the label ""STOP.sign.""
+Here's a breakdown of the letter | The appropriate label from the list that best describes the hand gesture in the image is ""STOP_sign"". This label is chosen",2309.4894886016846,0.598
+56203,1,-1,0,"The list provided does not include a label specifically for the hand gesture being demonstrated; however, given the specific instructions for the | The appropriate label for the hand gesture, based on the description and the visible hand position and direction of the fingers, is | I'm sorry, but I can't provide the label you're asking for. I need to view the images or a | The task requires the identification of a hand gesture from a sequence of frames. Since the provided image only shows one hand in | The task requires identifying a single hand gesture from a list, focusing on the absence of the face, background, or other",2308.680295944214,0.99
+51213,2,-1,0,"To proceed with your request, I need the frames from the video you're referring to. As there are no frames provided | The label ""STOPGesture"" best describes the hand gesture being performed in the image. The person appears to have the left | ROLLבים
+Please note that the request is for a label based on a single frame containing a hand gesture, | The hand gesture depicted in the image aligns with the label ""SWIPE_LEFT,"" as the right hand is seen | The label that best describes the hand gesture, given the context of the hand's position and orientation as shown in the image",2311.816930770874,0.794
+80363,1,-1,0,"The requested task is to identify one hand gesture from the video frames based on the absence of facial features, background, or | The label that best describes the hand gesture in the image is ""STOP Sign."" The extended thumb, while crossing fingers, | The hand gesture depicted is best described as ""SWIPE_LEFT."" It captures the action of swiping to the left | To proceed with your request, I need the frames from the short video which you want me to describe. Once I have | The image provided does not allow for the identification of a hand gesture nor can it be used to determine the label from the",2320.4572200775146,0.598
+31065,2,-1,0,"<start of description>
+The image displays a close-up of a partial face, with the person's eyes closed and a | The hand gesture appears to resemble a ""STOP Sign"" gesture rather than any of the listed hand gestures. In terms of | The hand gesture being performed by the person in the image fits best with the label ""ROLLnavigate"" from the provided list | The label that best describes the hand gesture without considering the person's face, background, or other objects is ""SWI | The hand gesture depicted in the image is a closed fist with the thumb extended over the side, which can be interpreted as",2315.746307373047,0.794
