@@ -90,9 +90,13 @@ else:
 LABEL_CANON = {name.lower(): name for name in GESTURE_LABELS}
 
 # -----------------------------------------------------------------------------
-# Config
-# -----------------------------------------------------------------------------
-MODEL_ID = os.getenv("VLM_MODEL_ID", "apple/FastVLM-1.5B")
+# Determine Model Selector
+VLM_MODEL_TYPE = os.getenv("VLM_MODEL", "fastvlm").lower()
+
+if VLM_MODEL_TYPE == "qwen3vl":
+    MODEL_ID = os.getenv("VLM_MODEL_ID", "Qwen/Qwen3-VL-4B-Instruct")
+else:
+    MODEL_ID = os.getenv("VLM_MODEL_ID", "apple/FastVLM-1.5B")
 
 FRAMES_TO_SAMPLE = int(os.getenv("VLM_FRAMES", "5"))
 MAX_TOKENS = int(os.getenv("VLM_MAX_TOKENS", "24"))
@@ -107,34 +111,42 @@ IMAGE_TOKEN_INDEX = -200  # per FastVLM
 class VLMNode(Node):
     def __init__(self) -> None:
         super().__init__("vlm_node")
-        self.get_logger().info(f"Loading {MODEL_ID} (first run may download weights)")
+        self.get_logger().info(f"Loading {MODEL_ID} in model type mode: {VLM_MODEL_TYPE}")
 
-        # Trust remote code flag (FastVLM needs this)
+        # Trust remote code flag
         trust = bool(int(os.getenv("VLM_TRUST_REMOTE", "1")))
 
         # ✅ CPU-only: do NOT try to use CUDA or device_map="auto"
         dtype = torch.float32
 
-        self.tok = AutoTokenizer.from_pretrained(
-            MODEL_ID,
-            trust_remote_code=trust,
-        )
+        if VLM_MODEL_TYPE == "qwen3vl":
+            from transformers import Qwen3VLForConditionalGeneration, AutoProcessor
+            self.processor = AutoProcessor.from_pretrained(MODEL_ID)
+            self.model = Qwen3VLForConditionalGeneration.from_pretrained(
+                MODEL_ID,
+                torch_dtype=dtype,
+                device_map=None,
+                trust_remote_code=trust
+            )
+            self.device = torch.device("cpu")
+            self.model.to(self.device)
+            self.img_proc = None
+        else:
+            self.tok = AutoTokenizer.from_pretrained(
+                MODEL_ID,
+                trust_remote_code=trust,
+            )
+            self.model = AutoModelForCausalLM.from_pretrained(
+                MODEL_ID,
+                torch_dtype=dtype,
+                device_map=None,
+                trust_remote_code=trust,
+            )
+            self.device = torch.device("cpu")
+            self.model.to(self.device)
+            self.img_proc = self.model.get_vision_tower().image_processor
 
-        self.model = AutoModelForCausalLM.from_pretrained(
-            MODEL_ID,
-            torch_dtype=dtype,
-            device_map=None,           # <-- important: no auto CUDA sharding
-            trust_remote_code=trust,
-        )
-
-        # Force everything onto CPU
-        self.device = torch.device("cpu")
-        self.model.to(self.device)
-
-        # FastVLM exposes a vision tower with an image processor
-        self.img_proc = self.model.get_vision_tower().image_processor
-
-        self.get_logger().info(f"FastVLM loaded on device: {self.device}")
+        self.get_logger().info(f"{VLM_MODEL_TYPE.upper()} loaded on device: {self.device}")
         self.srv = self.create_service(InferClip, "/vlm/infer", self.handle_infer)
         self.get_logger().info("VLM service ready at /vlm/infer")
 
@@ -182,6 +194,43 @@ class VLMNode(Node):
 
     @torch.inference_mode()
     def _infer_image(self, pil_img: Image.Image, user_prompt: str) -> str:
+        if VLM_MODEL_TYPE == "qwen3vl":
+            from qwen_vl_utils import process_vision_info
+            messages = [
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "image", "image": pil_img},
+                        {"type": "text", "text": user_prompt}
+                    ]
+                }
+            ]
+            text = self.processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+            image_inputs, video_inputs = process_vision_info(messages)
+            inputs = self.processor(
+                text=[text],
+                images=image_inputs,
+                videos=video_inputs,
+                padding=True,
+                return_tensors="pt"
+            ).to(self.device)
+            if "pixel_values" in inputs:
+                inputs["pixel_values"] = inputs["pixel_values"].to(dtype=self.model.dtype)
+
+            out_ids = self.model.generate(
+                **inputs,
+                max_new_tokens=MAX_NEW_TOKENS,
+                temperature=TEMPERATURE,
+                top_p=TOP_P,
+            )
+            generated_ids_trimmed = [
+                out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, out_ids)
+            ]
+            decoded = self.processor.batch_decode(
+                generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
+            )
+            return decoded[0].strip()
+
         # Build chat string with the <image> placeholder (per HF card)
         messages = [{"role": "user", "content": f"<image>\n{user_prompt}"}]
         rendered = self.tok.apply_chat_template(messages, add_generation_prompt=True, tokenize=False)
@@ -209,6 +258,8 @@ class VLMNode(Node):
             attention_mask=attention_mask,
             images=px,
             max_new_tokens=MAX_NEW_TOKENS,
+            temperature=TEMPERATURE,
+            top_p=TOP_P,
         )
         text = self.tok.decode(out_ids[0], skip_special_tokens=True).strip()
         return text.splitlines()[0].strip()

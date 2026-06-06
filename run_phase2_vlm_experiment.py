@@ -159,19 +159,41 @@ def main():
     df_val = run_pre_flight_checks()
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Loading FastVLM model on {device}...")
+    vlm_model_type = os.getenv("VLM_MODEL", "fastvlm").lower()
+    
+    if vlm_model_type == "qwen3vl":
+        model_id_env = os.getenv("VLM_MODEL_ID", "Qwen/Qwen3-VL-4B-Instruct")
+    else:
+        model_id_env = os.getenv("VLM_MODEL_ID", "apple/FastVLM-1.5B")
+        
+    print(f"Loading {vlm_model_type.upper()} model ({model_id_env}) on {device}...")
+    
+    # Temporarily override the module-level MODEL_ID for generate_config_audit
+    global MODEL_ID
+    MODEL_ID = model_id_env
     generate_config_audit(device)
     
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained(
-        MODEL_ID,
-        torch_dtype=torch.float16 if device.type == "cuda" else torch.float32,
-        device_map=None,
-        trust_remote_code=True
-    ).to(device)
-    model.eval()
-    
-    img_proc = model.get_vision_tower().image_processor
+    if vlm_model_type == "qwen3vl":
+        from transformers import Qwen3VLForConditionalGeneration, AutoProcessor
+        processor = AutoProcessor.from_pretrained(model_id_env)
+        model = Qwen3VLForConditionalGeneration.from_pretrained(
+            model_id_env,
+            torch_dtype=torch.float16 if device.type == "cuda" else torch.float32,
+            device_map=None,
+            trust_remote_code=True
+        ).to(device)
+        model.eval()
+        img_proc = None
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(model_id_env, trust_remote_code=True)
+        model = AutoModelForCausalLM.from_pretrained(
+            model_id_env,
+            torch_dtype=torch.float16 if device.type == "cuda" else torch.float32,
+            device_map=None,
+            trust_remote_code=True
+        ).to(device)
+        model.eval()
+        img_proc = model.get_vision_tower().image_processor
 
     # Start Resource Monitor
     monitor_proc = subprocess.Popen(["python3", "/home/sayak/HyRes/resource_monitor.py"])
@@ -212,26 +234,66 @@ def main():
         
         with torch.inference_mode():
             for pil_img in frames:
-                messages = [{"role": "user", "content": f"<image>\n{DEFAULT_PROMPT}"}]
-                rendered = tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=False)
-                pre, post = rendered.split("<image>", 1)
-                
-                pre_ids = tokenizer(pre, return_tensors="pt", add_special_tokens=False).input_ids
-                post_ids = tokenizer(post, return_tensors="pt", add_special_tokens=False).input_ids
-                
-                img_tok = torch.tensor([[IMAGE_TOKEN_INDEX]], dtype=pre_ids.dtype)
-                input_ids = torch.cat([pre_ids, img_tok, post_ids], dim=1).to(device)
-                attention_mask = torch.ones_like(input_ids, device=device)
-                
-                px = img_proc(images=pil_img, return_tensors="pt")["pixel_values"].to(device, dtype=model.dtype)
-                
-                out_ids = model.generate(
-                    inputs=input_ids,
-                    attention_mask=attention_mask,
-                    images=px,
-                    max_new_tokens=MAX_NEW_TOKENS,
-                )
-                text = tokenizer.decode(out_ids[0], skip_special_tokens=True).strip()
+                if vlm_model_type == "qwen3vl":
+                    from qwen_vl_utils import process_vision_info
+                    messages = [
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "image", "image": pil_img},
+                                {"type": "text", "text": DEFAULT_PROMPT}
+                            ]
+                        }
+                    ]
+                    text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+                    image_inputs, video_inputs = process_vision_info(messages)
+                    inputs = processor(
+                        text=[text],
+                        images=image_inputs,
+                        videos=video_inputs,
+                        padding=True,
+                        return_tensors="pt"
+                    ).to(device)
+                    if "pixel_values" in inputs:
+                        inputs["pixel_values"] = inputs["pixel_values"].to(dtype=model.dtype)
+                        
+                    out_ids = model.generate(
+                        **inputs,
+                        max_new_tokens=MAX_NEW_TOKENS,
+                        temperature=TEMPERATURE,
+                        top_p=TOP_P,
+                    )
+                    generated_ids_trimmed = [
+                        out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, out_ids)
+                    ]
+                    decoded = processor.batch_decode(
+                        generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
+                    )
+                    text = decoded[0].strip()
+                else:
+                    messages = [{"role": "user", "content": f"<image>\n{DEFAULT_PROMPT}"}]
+                    rendered = tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=False)
+                    pre, post = rendered.split("<image>", 1)
+                    
+                    pre_ids = tokenizer(pre, return_tensors="pt", add_special_tokens=False).input_ids
+                    post_ids = tokenizer(post, return_tensors="pt", add_special_tokens=False).input_ids
+                    
+                    img_tok = torch.tensor([[IMAGE_TOKEN_INDEX]], dtype=pre_ids.dtype)
+                    input_ids = torch.cat([pre_ids, img_tok, post_ids], dim=1).to(device)
+                    attention_mask = torch.ones_like(input_ids, device=device)
+                    
+                    px = img_proc(images=pil_img, return_tensors="pt")["pixel_values"].to(device, dtype=model.dtype)
+                    
+                    out_ids = model.generate(
+                        inputs=input_ids,
+                        attention_mask=attention_mask,
+                        images=px,
+                        max_new_tokens=MAX_NEW_TOKENS,
+                        temperature=TEMPERATURE,
+                        top_p=TOP_P,
+                    )
+                    text = tokenizer.decode(out_ids[0], skip_special_tokens=True).strip()
+                    
                 label_val = canonicalize_prediction(text)
                 frame_preds.append(label_val)
                 

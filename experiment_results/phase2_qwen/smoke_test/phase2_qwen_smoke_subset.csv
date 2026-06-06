@@ -1,0 +1,101 @@
+video_id,gesture_name,new_label,source_split,assigned_split
+48476,Swipe Left,0,val,validation
+26696,Swipe Left,0,val,validation
+39995,Swipe Left,0,val,validation
+37036,Swipe Left,0,val,validation
+46299,Swipe Left,0,val,validation
+62719,Swipe Left,0,val,validation
+19155,Swipe Left,0,val,validation
+33772,Swipe Left,0,val,validation
+103176,Swipe Left,0,val,validation
+137514,Swipe Left,0,val,validation
+121385,Swipe Left,0,val,validation
+38093,Swipe Left,0,val,validation
+530,Swipe Left,0,val,validation
+92233,Swipe Left,0,val,validation
+35520,Swipe Left,0,val,validation
+33123,Swipe Left,0,val,validation
+101834,Swipe Left,0,val,validation
+60955,Swipe Left,0,val,validation
+76517,Swipe Left,0,val,validation
+19927,Swipe Left,0,val,validation
+125986,Swipe Left,0,val,validation
+52034,Swipe Left,0,val,validation
+42380,Swipe Left,0,val,validation
+26542,Swipe Left,0,val,validation
+57205,Swipe Left,0,val,validation
+74390,Swipe Right,1,val,validation
+77059,Swipe Right,1,val,validation
+85662,Swipe Right,1,val,validation
+120211,Swipe Right,1,val,validation
+112080,Swipe Right,1,val,validation
+87711,Swipe Right,1,val,validation
+145726,Swipe Right,1,val,validation
+23944,Swipe Right,1,val,validation
+49098,Swipe Right,1,val,validation
+34705,Swipe Right,1,val,validation
+21114,Swipe Right,1,val,validation
+7978,Swipe Right,1,val,validation
+63081,Swipe Right,1,val,validation
+46082,Swipe Right,1,val,validation
+92633,Swipe Right,1,val,validation
+46950,Swipe Right,1,val,validation
+131954,Swipe Right,1,val,validation
+35469,Swipe Right,1,val,validation
+56695,Swipe Right,1,val,validation
+141907,Swipe Right,1,val,validation
+23069,Swipe Right,1,val,validation
+115460,Swipe Right,1,val,validation
+130017,Swipe Right,1,val,validation
+96077,Swipe Right,1,val,validation
+78520,Swipe Right,1,val,validation
+34249,Rolling Hand Forward,2,val,validation
+107172,Rolling Hand Forward,2,val,validation
+115605,Rolling Hand Forward,2,val,validation
+121065,Rolling Hand Forward,2,val,validation
+39880,Rolling Hand Forward,2,val,validation
+107184,Rolling Hand Forward,2,val,validation
+127375,Rolling Hand Forward,2,val,validation
+118227,Rolling Hand Forward,2,val,validation
+109580,Rolling Hand Forward,2,val,validation
+61558,Rolling Hand Forward,2,val,validation
+80114,Rolling Hand Forward,2,val,validation
+56020,Rolling Hand Forward,2,val,validation
+80405,Rolling Hand Forward,2,val,validation
+94380,Rolling Hand Forward,2,val,validation
+99774,Rolling Hand Forward,2,val,validation
+12163,Rolling Hand Forward,2,val,validation
+121078,Rolling Hand Forward,2,val,validation
+28890,Rolling Hand Forward,2,val,validation
+61339,Rolling Hand Forward,2,val,validation
+13297,Rolling Hand Forward,2,val,validation
+132407,Rolling Hand Forward,2,val,validation
+26006,Rolling Hand Forward,2,val,validation
+73318,Rolling Hand Forward,2,val,validation
+86164,Rolling Hand Forward,2,val,validation
+49511,Rolling Hand Forward,2,val,validation
+96617,Stop Sign,3,val,validation
+41419,Stop Sign,3,val,validation
+144061,Stop Sign,3,val,validation
+2914,Stop Sign,3,val,validation
+41812,Stop Sign,3,val,validation
+55219,Stop Sign,3,val,validation
+21473,Stop Sign,3,val,validation
+111815,Stop Sign,3,val,validation
+32517,Stop Sign,3,val,validation
+78846,Stop Sign,3,val,validation
+51246,Stop Sign,3,val,validation
+127805,Stop Sign,3,val,validation
+43890,Stop Sign,3,val,validation
+26503,Stop Sign,3,val,validation
+36980,Stop Sign,3,val,validation
+85968,Stop Sign,3,val,validation
+2120,Stop Sign,3,val,validation
+51349,Stop Sign,3,val,validation
+127031,Stop Sign,3,val,validation
+92640,Stop Sign,3,val,validation
+135588,Stop Sign,3,val,validation
+95835,Stop Sign,3,val,validation
+18759,Stop Sign,3,val,validation
+1700,Stop Sign,3,val,validation
+14887,Stop Sign,3,val,validation
