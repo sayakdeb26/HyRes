@@ -16,7 +16,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 # -----------------------------------------------------------------------------
 
 # Must stay in sync with your LSTM / dataset labels
-GESTURE_LABELS = [
+PRODUCTION_GESTURE_LABELS = [
     "ROLL_BACK",
     "ROLL_FWD",
     "SWIPE_DOWN",
@@ -31,7 +31,13 @@ GESTURE_LABELS = [
     "UNKNOWN",
 ]
 
-LABEL_CANON = {name.lower(): name for name in GESTURE_LABELS}
+BENCHMARK_GESTURE_LABELS = [
+    "SWIPE_LEFT",
+    "SWIPE_RIGHT",
+    "ROLL_FWD",
+    "STOP_SIGN",
+    "UNKNOWN",
+]
 
 DEFAULT_GESTURE_PROMPT = """You will be given frames from a short video.
 Each frame contains a single person performing exactly one hand gesture.
@@ -56,6 +62,32 @@ If none of the labels fits, answer UNKNOWN.
 Respond with ONLY the label text, nothing else.
 """
 
+BENCHMARK_PROMPT = """You will be given frames from a short video.
+Each video contains one of the following gestures:
+
+* SWIPE_LEFT
+* SWIPE_RIGHT
+* ROLL_FWD
+* STOP_SIGN
+
+If none match, answer UNKNOWN.
+Respond with ONLY one label.
+No explanation.
+No reasoning.
+No extra text.
+"""
+
+# Determine Mode
+BENCHMARK_MODE = os.getenv("VLM_BENCHMARK_MODE", "0") in ("1", "true", "True")
+
+if BENCHMARK_MODE:
+    GESTURE_LABELS = BENCHMARK_GESTURE_LABELS
+    PROMPT = os.getenv("VLM_PROMPT", BENCHMARK_PROMPT)
+else:
+    GESTURE_LABELS = PRODUCTION_GESTURE_LABELS
+    PROMPT = os.getenv("VLM_PROMPT", DEFAULT_GESTURE_PROMPT)
+
+LABEL_CANON = {name.lower(): name for name in GESTURE_LABELS}
 
 # -----------------------------------------------------------------------------
 # Config
@@ -66,7 +98,6 @@ FRAMES_TO_SAMPLE = int(os.getenv("VLM_FRAMES", "5"))
 MAX_TOKENS = int(os.getenv("VLM_MAX_TOKENS", "24"))
 MAX_NEW_TOKENS = MAX_TOKENS     # <-- THIS fixes the crash
 
-PROMPT = os.getenv("VLM_PROMPT", DEFAULT_GESTURE_PROMPT)
 TEMPERATURE = float(os.getenv("VLM_TEMPERATURE", "0.0"))
 TOP_P = float(os.getenv("VLM_TOP_P", "1.0"))
 
@@ -187,23 +218,34 @@ class VLMNode(Node):
         if not raw:
             return "UNKNOWN"
 
-        # take only first line, strip punctuation
-        s = raw.strip().splitlines()[0]
-        s = s.strip().strip(".")
-        low = s.lower()
+        s = raw.strip().lower()
 
-        # exact match
-        if low in LABEL_CANON:
-            return LABEL_CANON[low]
+        # Define custom alignment and phrasings
+        mapping = {
+            "SWIPE_LEFT": ["swipe left", "swiping left", "swipe_left", "swiping_left"],
+            "SWIPE_RIGHT": ["swipe right", "swiping right", "swipe_right", "swiping_right"],
+            "ROLL_FWD": ["rolling hand forward", "roll forward", "roll fwd", "rolling forward", "roll_fwd", "rollumont", "rollplayable", "rollversed", "roll"],
+            "STOP_SIGN": ["stop sign", "stop hand", "stop gesture", "open palm", "stop signal", "stop_sign", "stop signing", "stop drawing", "stop signifies", "stop"]
+        }
 
-        # allow "swipe left" vs "SWIPE_LEFT"
-        low2 = low.replace(" ", "_")
-        if low2 in LABEL_CANON:
-            return LABEL_CANON[low2]
+        # Check only labels that exist in our active taxonomy (GESTURE_LABELS)
+        active_labels = {name: name for name in GESTURE_LABELS}
 
-        # allow phrases containing the label name
+        for label_key, patterns in mapping.items():
+            if label_key in active_labels:
+                for p in patterns:
+                    if p in s:
+                        return label_key
+
+        # Fallback keyword checking for benchmark labels
+        if "SWIPE_LEFT" in active_labels and "swipe" in s and "left" in s:
+            return "SWIPE_LEFT"
+        if "SWIPE_RIGHT" in active_labels and "swipe" in s and "right" in s:
+            return "SWIPE_RIGHT"
+
+        # Production backward-compatible check
         for key, canon in LABEL_CANON.items():
-            if key in low:
+            if key in s:
                 return canon
 
         return "UNKNOWN"

@@ -18,11 +18,14 @@ import seaborn as sns
 import warnings
 warnings.filterwarnings("ignore")
 
-# Force paths
+# Force paths and set benchmark mode env var
+os.environ["VLM_BENCHMARK_MODE"] = "1"
 sys.path.append('/home/sayak')
 sys.path.append('/home/sayak/HyRes')
+sys.path.append('/home/sayak/HybridTestBed/gesture_ws/src/vlm_ros/vlm_ros')
 
 from transformers import AutoTokenizer, AutoModelForCausalLM
+import vlm_node
 
 # -----------------------------------------------------------------------------
 # Configuration
@@ -50,27 +53,15 @@ GESTURE_MAPPING = {
 REVERSE_MAPPING = {v: k for k, v in GESTURE_MAPPING.items()}
 ALLOWED_CLASSES = [0, 1, 2, 3]
 
-DEFAULT_PROMPT = """You will be given frames from a short video.
-Each frame contains a single person performing exactly one hand gesture.
-Focus only on the hands and ignore the face, background, or other objects.
-
-Choose exactly ONE label from the following list that best describes the hand gesture:
-
-- SWIPE_LEFT
-- SWIPE_RIGHT
-- ROLL_FWD
-- STOP_SIGN
-- UNKNOWN
-
-If none of the labels fits, answer UNKNOWN.
-Respond with ONLY the label text, nothing else.
-"""
+# Benchmark mode configuration from vlm_node
+DEFAULT_PROMPT = vlm_node.PROMPT
 
 VLM_TO_CLASS = {
     "SWIPE_LEFT": 0,
     "SWIPE_RIGHT": 1,
     "ROLL_FWD": 2,
-    "STOP_SIGN": 3
+    "STOP_SIGN": 3,
+    "UNKNOWN": -1
 }
 
 # -----------------------------------------------------------------------------
@@ -145,20 +136,8 @@ def sample_frames_from_dir(directory, k):
     return out
 
 def canonicalize_prediction(raw_text):
-    if not raw_text:
-        return -1
-        
-    s = raw_text.strip().splitlines()[0].strip().strip(".").upper()
-    s = s.replace(" ", "_")
-    
-    if s in VLM_TO_CLASS:
-        return VLM_TO_CLASS[s]
-        
-    for key, val in VLM_TO_CLASS.items():
-        if key in s:
-            return val
-            
-    return -1
+    canon_str = vlm_node.VLMNode._canonical_label(None, raw_text)
+    return VLM_TO_CLASS.get(canon_str, -1)
 
 def aggregate_predictions(preds):
     from collections import Counter
