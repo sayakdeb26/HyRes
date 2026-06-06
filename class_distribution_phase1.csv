@@ -1,0 +1,21 @@
+split,class_id,class_name,count,percentage
+train_70,0,Swipe Left,2913,24.897435897435898
+train_70,1,Swipe Right,2859,24.435897435897434
+train_70,2,Rolling Hand Forward,2892,24.71794871794872
+train_70,3,Stop Sign,3036,25.94871794871795
+inc10_a,0,Swipe Left,416,24.895272292040694
+inc10_a,1,Swipe Right,408,24.416517055655294
+inc10_a,2,Rolling Hand Forward,413,24.71573907839617
+inc10_a,3,Stop Sign,434,25.97247157390784
+inc10_b,0,Swipe Left,416,24.880382775119617
+inc10_b,1,Swipe Right,409,24.46172248803828
+inc10_b,2,Rolling Hand Forward,413,24.70095693779904
+inc10_b,3,Stop Sign,434,25.95693779904306
+inc10_c,0,Swipe Left,417,24.94019138755981
+inc10_c,1,Swipe Right,408,24.401913875598087
+inc10_c,2,Rolling Hand Forward,414,24.760765550239235
+inc10_c,3,Stop Sign,433,25.897129186602868
+validation,0,Swipe Left,494,24.2513500245459
+validation,1,Swipe Right,486,23.85861561119293
+validation,2,Rolling Hand Forward,521,25.576828669612173
+validation,3,Stop Sign,536,26.313205694648996
