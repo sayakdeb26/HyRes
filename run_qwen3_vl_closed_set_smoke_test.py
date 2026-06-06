@@ -2,6 +2,7 @@
 import os
 os.environ["MKL_THREADING_LAYER"] = "GNU"
 os.environ["VLM_BENCHMARK_MODE"] = "1"
+os.environ["VLM_FRAMES"] = "10"
 import sys
 import time
 import subprocess
@@ -43,11 +44,12 @@ VLM_TO_CLASS = {
     "SWIPE_LEFT": 0,
     "SWIPE_RIGHT": 1,
     "ROLL_FWD": 2,
-    "STOP_SIGN": 3,
-    "UNKNOWN": -1
+    "STOP_SIGN": 3
 }
 
 CLASS_NAMES = ["SWIPE_LEFT", "SWIPE_RIGHT", "ROLL_FWD", "STOP_SIGN"]
+
+fallback_events = []
 
 def get_gpu_stats():
     try:
@@ -61,7 +63,7 @@ def get_gpu_stats():
     except Exception as e:
         return 0.0, 0.0
 
-def sample_frames(directory, k=5):
+def sample_frames(directory, k=10):
     images = sorted(glob.glob(os.path.join(directory, "*.jpg")))
     if not images:
         return [], []
@@ -83,22 +85,55 @@ def sample_frames(directory, k=5):
             pass
     return idxs, out_paths, out_images
 
-def parse_prediction(raw_output):
+def parse_closed_set(raw_output, video_id):
+    if not raw_output:
+        fallback_events.append({
+            "video_id": video_id,
+            "raw_output": "",
+            "rule": "Empty response -> Fallback to STOP_SIGN",
+            "mapped": "STOP_SIGN"
+        })
+        return "STOP_SIGN"
+        
     s = raw_output.strip().lower()
+    
+    # Exact mappings
     mapping = {
         "SWIPE_LEFT": ["swipe left", "swiping left", "swipe_left", "swiping_left"],
         "SWIPE_RIGHT": ["swipe right", "swiping right", "swipe_right", "swiping_right"],
         "ROLL_FWD": ["rolling hand forward", "roll forward", "roll fwd", "rolling forward", "roll_fwd", "rollumont", "rollplayable", "rollversed", "roll"],
         "STOP_SIGN": ["stop sign", "stop hand", "stop gesture", "open palm", "stop signal", "stop_sign", "stop signing", "stop drawing", "stop signifies", "stop"]
     }
+    
     for label_key, patterns in mapping.items():
         for p in patterns:
             if p in s:
                 return label_key
-    return "UNKNOWN"
+                
+    # Closest valid fallback rules
+    if "left" in s or "l" in s:
+        mapped = "SWIPE_LEFT"
+        rule = "Contains 'left'/'l' -> Fallback to SWIPE_LEFT"
+    elif "right" in s or "r" in s:
+        mapped = "SWIPE_RIGHT"
+        rule = "Contains 'right'/'r' -> Fallback to SWIPE_RIGHT"
+    elif "roll" in s or "fwd" in s or "circular" in s:
+        mapped = "ROLL_FWD"
+        rule = "Contains 'roll'/'fwd'/'circular' -> Fallback to ROLL_FWD"
+    else:
+        mapped = "STOP_SIGN"
+        rule = "Unmatched -> Default to STOP_SIGN"
+        
+    fallback_events.append({
+        "video_id": video_id,
+        "raw_output": raw_output,
+        "rule": rule,
+        "mapped": mapped
+    })
+    return mapped
 
 def main():
-    print("=== Qwen3-VL Balanced Smoke Test ===")
+    print("=== Qwen3-VL Closed-Set Balanced Smoke Test (10 Frames) ===")
     
     # 1. Select Balanced Subset of 100 samples
     df = pd.read_csv(MANIFEST_PATH)
@@ -111,8 +146,6 @@ def main():
         subset_list.append(sampled)
         
     subset_df = pd.concat(subset_list).reset_index(drop=True)
-    subset_df.to_csv(os.path.join(RESULTS_DIR, "phase2_qwen_smoke_subset.csv"), index=False)
-    print(f"Created subset CSV with {len(subset_df)} balanced samples.")
     
     # 2. Load model with Quantization
     print("Loading Model/Processor...")
@@ -136,8 +169,8 @@ def main():
     # 3. Process 100 samples
     predictions = []
     latencies = []
-    resource_stats = []
     
+    # Let's read the BENCHMARK_PROMPT directly from vlm_node
     prompt_text = vlm_node.BENCHMARK_PROMPT
     
     for idx, row in subset_df.iterrows():
@@ -146,7 +179,8 @@ def main():
         true_name = row["gesture_name"]
         
         clip_dir = os.path.join(WORKSPACE_DIR, "DataSet_Full", "phase1", "validation", video_id)
-        frame_idxs, frame_paths, pil_images = sample_frames(clip_dir, k=5)
+        # Sample 10 frames
+        frame_idxs, frame_paths, pil_images = sample_frames(clip_dir, k=10)
         
         if not pil_images:
             print(f"[{idx+1}/100] Error: No frames found for video {video_id}")
@@ -158,11 +192,6 @@ def main():
         content_list.append({"type": "text", "text": prompt_text})
         
         messages = [{"role": "user", "content": content_list}]
-        
-        # Resource stats before
-        vram_start, gpu_start = get_gpu_stats()
-        cpu_start = psutil.cpu_percent(interval=None)
-        ram_start = psutil.virtual_memory().used / (1024 * 1024)
         
         start_time = time.time()
         
@@ -187,22 +216,6 @@ def main():
         latency_ms = (end_time - start_time) * 1000.0
         latencies.append(latency_ms)
         
-        # Resource stats after
-        vram_end, gpu_end = get_gpu_stats()
-        cpu_end = psutil.cpu_percent(interval=None)
-        ram_end = psutil.virtual_memory().used / (1024 * 1024)
-        
-        resource_stats.append({
-            "vram_peak": max(vram_start, vram_end),
-            "vram_mean": (vram_start + vram_end) / 2.0,
-            "gpu_peak": max(gpu_start, gpu_end),
-            "gpu_mean": (gpu_start + gpu_end) / 2.0,
-            "cpu_peak": max(cpu_start, cpu_end),
-            "cpu_mean": (cpu_start + cpu_end) / 2.0,
-            "ram_peak": max(ram_start, ram_end),
-            "ram_mean": (ram_start + ram_end) / 2.0
-        })
-        
         generated_ids_trimmed = [
             out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, out_ids)
         ]
@@ -210,8 +223,8 @@ def main():
             generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
         )[0].strip()
         
-        parsed = parse_prediction(raw_output)
-        pred_label = VLM_TO_CLASS.get(parsed, -1)
+        parsed = parse_closed_set(raw_output, video_id)
+        pred_label = VLM_TO_CLASS[parsed]
         
         predictions.append({
             "video_id": video_id,
@@ -226,111 +239,123 @@ def main():
 
     # 4. Save predictions CSV
     pred_df = pd.DataFrame(predictions)
-    pred_df.to_csv(os.path.join(RESULTS_DIR, "qwen_smoke_predictions.csv"), index=False)
+    pred_df.to_csv(os.path.join(RESULTS_DIR, "closed_set_predictions.csv"), index=False)
     
     # 5. Compute Metrics
     y_true = pred_df["true_label"].tolist()
     y_pred = pred_df["predicted_label"].tolist()
     
-    # Accuracy
     accuracy = accuracy_score(y_true, y_pred)
     
-    # Precision, Recall, F1
-    precision_mac, recall_mac, f1_mac, _ = precision_recall_fscore_support(
+    p_mac, r_mac, f1_mac, _ = precision_recall_fscore_support(
         y_true, y_pred, average="macro", zero_division=0
     )
     
-    # Per-class metrics
     p_class, r_class, f1_class, support_class = precision_recall_fscore_support(
         y_true, y_pred, labels=[0, 1, 2, 3], zero_division=0
     )
     
-    # UNKNOWN prediction count
-    unknown_count = sum(1 for p in y_pred if p == -1)
-    
     # 6. Confusion Matrix
     cm = confusion_matrix(y_true, y_pred, labels=[0, 1, 2, 3])
     cm_df = pd.DataFrame(cm, index=CLASS_NAMES, columns=CLASS_NAMES)
-    cm_df.to_csv(os.path.join(RESULTS_DIR, "qwen_smoke_confusion_matrix.csv"))
+    cm_df.to_csv(os.path.join(RESULTS_DIR, "closed_set_confusion_matrix.csv"))
     
     plt.figure(figsize=(8, 6))
     sns.heatmap(cm_df, annot=True, fmt="d", cmap="Blues")
     plt.ylabel("True Label")
     plt.xlabel("Predicted Label")
-    plt.title("Qwen3-VL Smoke Test Confusion Matrix")
+    plt.title("Qwen3-VL Closed-Set Confusion Matrix")
     plt.tight_layout()
-    plt.savefig(os.path.join(RESULTS_DIR, "qwen_smoke_confusion_matrix.png"))
+    plt.savefig(os.path.join(RESULTS_DIR, "closed_set_confusion_matrix.png"))
     plt.close()
     
-    # 7. Latency Analysis
-    lat_mean = np.mean(latencies)
-    lat_med = np.median(latencies)
-    lat_p95 = np.percentile(latencies, 95)
-    lat_max = np.max(latencies)
-    lat_min = np.min(latencies)
-    
-    # 8. Resource Analysis
-    res_df = pd.DataFrame(resource_stats)
-    mean_gpu = res_df["gpu_mean"].mean()
-    peak_gpu = res_df["gpu_peak"].max()
-    mean_vram = res_df["vram_mean"].mean()
-    peak_vram = res_df["vram_peak"].max()
-    mean_cpu = res_df["cpu_mean"].mean()
-    peak_cpu = res_df["cpu_peak"].max()
-    
-    # 9. Error Analysis
-    confusions = []
-    for idx, row in pred_df.iterrows():
-        t = row["true_label"]
-        p = row["predicted_label"]
-        if t != p:
-            t_name = CLASS_TO_VLM[t]
-            p_name = CLASS_TO_VLM[p] if p in CLASS_TO_VLM else "UNKNOWN"
-            confusions.append(f"{t_name} -> {p_name}")
+    # 7. Generate closed_set_parser_report.md
+    with open(os.path.join(RESULTS_DIR, "closed_set_parser_report.md"), "w") as f:
+        f.write("# Qwen3-VL Closed-Set Parser Report\n\n")
+        f.write("## Fallback Mapping Rules\n\n")
+        f.write("In closed-set mode, all model predictions must map to one of the 4 valid classes. The fallback rules applied when no direct match is found are:\n\n")
+        f.write("1. **Empty Response**: Mapped to `STOP_SIGN`.\n")
+        f.write("2. **Keyword Match 'left'/'l'**: Mapped to `SWIPE_LEFT`.\n")
+        f.write("3. **Keyword Match 'right'/'r'**: Mapped to `SWIPE_RIGHT`.\n")
+        f.write("4. **Keyword Match 'roll'/'fwd'/'circular'**: Mapped to `ROLL_FWD`.\n")
+        f.write("5. **Unmatched / Default Fallback**: Mapped to `STOP_SIGN`.\n\n")
+        
+        f.write("## Logged Fallback Events during Smoke Test\n\n")
+        if fallback_events:
+            f.write("| Video ID | Raw Output | Rule Applied | Mapped Label |\n")
+            f.write("|---|---|---|---|\n")
+            for ev in fallback_events:
+                f.write(f"| {ev['video_id']} | `{ev['raw_output']}` | {ev['rule']} | `{ev['mapped']}` |\n")
+        else:
+            f.write("No fallback events occurred during the test; all outputs matched canonical labels exactly.\n")
+
+    # 8. Compare with previous Qwen smoke test
+    prev_pred_path = os.path.join(RESULTS_DIR, "qwen_smoke_predictions.csv")
+    if os.path.exists(prev_pred_path):
+        prev_df = pd.read_csv(prev_pred_path)
+        y_true_prev = prev_df["true_label"].tolist()
+        y_pred_prev = prev_df["predicted_label"].tolist()
+        
+        accuracy_prev = accuracy_score(y_true_prev, y_pred_prev)
+        p_mac_prev, r_mac_prev, f1_mac_prev, _ = precision_recall_fscore_support(
+            y_true_prev, y_pred_prev, average="macro", zero_division=0
+        )
+        
+        cm_prev = confusion_matrix(y_true_prev, y_pred_prev, labels=[0, 1, 2, 3])
+        
+        with open(os.path.join(RESULTS_DIR, "closed_set_vs_previous_qwen.md"), "w") as f:
+            f.write("# Comparison: Closed-Set vs. Previous Open-Set Qwen3-VL\n\n")
+            f.write("| Metric | Open-Set (with UNKNOWN) | Closed-Set (without UNKNOWN) | Change |\n")
+            f.write("|---|---|---|---|\n")
+            f.write(f"| **Accuracy** | {accuracy_prev:.4f} | {accuracy:.4f} | {accuracy - accuracy_prev:+.4f} |\n")
+            f.write(f"| **Macro Precision** | {p_mac_prev:.4f} | {p_mac:.4f} | {p_mac - p_mac_prev:+.4f} |\n")
+            f.write(f"| **Macro Recall** | {r_mac_prev:.4f} | {r_mac:.4f} | {r_mac - r_mac_prev:+.4f} |\n")
+            f.write(f"| **Macro F1** | {f1_mac_prev:.4f} | {f1_mac:.4f} | {f1_mac - f1_mac_prev:+.4f} |\n\n")
             
-    conf_series = pd.Series(confusions)
-    conf_counts = conf_series.value_counts()
-    
-    # 10. Generate deliverables
-    # 10.1 qwen_smoke_metrics.md
-    with open(os.path.join(RESULTS_DIR, "qwen_smoke_metrics.md"), "w") as f:
-        f.write("# Qwen3-VL Smoke Test Metrics\n\n")
+            f.write("## Confusion Matrix Differences\n\n")
+            f.write("### Previous Open-Set Heatmap Values:\n")
+            f.write("```csv\n")
+            f.write(pd.DataFrame(cm_prev, index=CLASS_NAMES, columns=CLASS_NAMES).to_csv())
+            f.write("```\n\n")
+            f.write("### New Closed-Set Heatmap Values:\n")
+            f.write("```csv\n")
+            f.write(cm_df.to_csv())
+            f.write("```\n")
+    else:
+        with open(os.path.join(RESULTS_DIR, "closed_set_vs_previous_qwen.md"), "w") as f:
+            f.write("# Comparison: Closed-Set vs. Previous Open-Set Qwen3-VL\n\n")
+            f.write("Previous predictions file not found; comparison not available.\n")
+
+    # 9. Generate other files
+    # 9.1 closed_set_metrics.md
+    with open(os.path.join(RESULTS_DIR, "closed_set_metrics.md"), "w") as f:
+        f.write("# Closed-Set Smoke Test Metrics\n\n")
         f.write(f"- **Accuracy**: {accuracy:.4f}\n")
-        f.write(f"- **Macro Precision**: {precision_mac:.4f}\n")
-        f.write(f"- **Macro Recall**: {recall_mac:.4f}\n")
+        f.write(f"- **Macro Precision**: {p_mac:.4f}\n")
+        f.write(f"- **Macro Recall**: {r_mac:.4f}\n")
         f.write(f"- **Macro F1**: {f1_mac:.4f}\n")
-        f.write(f"- **UNKNOWN Predictions**: {unknown_count} / {len(pred_df)} ({unknown_count/len(pred_df)*100.1:.1f}%)\n")
         
-    # 10.2 qwen_smoke_latency.md
-    with open(os.path.join(RESULTS_DIR, "qwen_smoke_latency.md"), "w") as f:
-        f.write("# Qwen3-VL Latency Analysis\n\n")
-        f.write(f"- **Mean Latency**: {lat_mean:.2f} ms\n")
-        f.write(f"- **Median Latency**: {lat_med:.2f} ms\n")
-        f.write(f"- **P95 Latency**: {lat_p95:.2f} ms\n")
-        f.write(f"- **Maximum Latency**: {lat_max:.2f} ms\n")
-        f.write(f"- **Minimum Latency**: {lat_min:.2f} ms\n")
-        
-    # 10.3 qwen_smoke_resources.md
-    with open(os.path.join(RESULTS_DIR, "qwen_smoke_resources.md"), "w") as f:
-        f.write("# Qwen3-VL Resource Consumption Analysis\n\n")
-        f.write(f"- **Mean GPU Utilization**: {mean_gpu:.1f}%\n")
-        f.write(f"- **Peak GPU Utilization**: {peak_gpu:.1f}%\n")
-        f.write(f"- **Mean VRAM Usage**: {mean_vram:.1f} MB\n")
-        f.write(f"- **Peak VRAM Usage**: {peak_vram:.1f} MB\n")
-        f.write(f"- **Mean CPU Usage**: {mean_cpu:.1f}%\n")
-        f.write(f"- **Peak CPU Usage**: {peak_cpu:.1f}%\n")
-        
-    # 10.4 qwen_smoke_classification_report.md
-    with open(os.path.join(RESULTS_DIR, "qwen_smoke_classification_report.md"), "w") as f:
-        f.write("# Qwen3-VL Smoke Test Classification Report\n\n")
+    # 9.2 closed_set_classification_report.md
+    with open(os.path.join(RESULTS_DIR, "closed_set_classification_report.md"), "w") as f:
+        f.write("# Closed-Set Classification Report\n\n")
         f.write("| Gesture Class | Precision | Recall | F1 | Support |\n")
         f.write("|---|---|---|---|---|\n")
         for i, name in enumerate(CLASS_NAMES):
             f.write(f"| {name} | {p_class[i]:.4f} | {r_class[i]:.4f} | {f1_class[i]:.4f} | {support_class[i]} |\n")
             
-    # 10.5 qwen_smoke_error_analysis.md
-    with open(os.path.join(RESULTS_DIR, "qwen_smoke_error_analysis.md"), "w") as f:
-        f.write("# Qwen3-VL Smoke Test Error Analysis\n\n")
+    # 9.3 closed_set_error_analysis.md
+    confusions = []
+    for idx, row in pred_df.iterrows():
+        t = row["true_label"]
+        p = row["predicted_label"]
+        if t != p:
+            confusions.append(f"{CLASS_TO_VLM[t]} -> {CLASS_TO_VLM[p]}")
+            
+    conf_series = pd.Series(confusions)
+    conf_counts = conf_series.value_counts()
+    
+    with open(os.path.join(RESULTS_DIR, "closed_set_error_analysis.md"), "w") as f:
+        f.write("# Closed-Set Error Analysis\n\n")
         f.write("## Top Confusion Pairs\n\n")
         f.write("| Confusion Pair | Count | Percentage of Errors |\n")
         f.write("|---|---|---|\n")
@@ -339,35 +364,28 @@ def main():
             pct = (count / total_errors) * 100.0 if total_errors > 0 else 0.0
             f.write(f"| {pair} | {count} | {pct:.1f}% |\n")
             
-    # 10.6 qwen_smoke_vs_fastvlm.md
-    with open(os.path.join(RESULTS_DIR, "qwen_smoke_vs_fastvlm.md"), "w") as f:
-        f.write("# Comparison: Qwen3-VL vs. FastVLM Smoke Test V2\n\n")
-        f.write("| Metric | FastVLM-1.5B (Frame Voting) | Qwen3-VL-4B (Temporal Reasoning) | Change |\n")
-        f.write("|---|---|---|---|\n")
-        f.write(f"| **Accuracy** | 0.0300 | {accuracy:.4f} | {accuracy - 0.0300:+.4f} |\n")
-        f.write(f"| **Macro F1** | 0.0517 | {f1_mac:.4f} | {f1_mac - 0.0517:+.4f} |\n")
-        f.write(f"| **UNKNOWN Rate** | 95.0% | {unknown_count/len(pred_df)*100.0:.1f}% | {(unknown_count/len(pred_df) - 0.95)*100.0:+.1f}% |\n")
-        f.write(f"| **Mean Latency (ms)** | 2325.15 | {lat_mean:.2f} | {lat_mean - 2325.15:+.2f} |\n")
-        f.write(f"| **P95 Latency (ms)** | 2359.88 | {lat_p95:.2f} | {lat_p95 - 2359.88:+.2f} |\n")
-        
-    # Decision Logic:
-    decision = "READY FOR FULL 2037-SAMPLE QWEN3-VL BENCHMARK" if accuracy >= 0.50 else "NOT READY FOR FULL BENCHMARK"
+    # Decision logic
+    decision = "READY FOR FULL 2037-SAMPLE CLOSED-SET QWEN3-VL BENCHMARK" if accuracy >= 0.60 else "NOT READY"
+    justification = (
+        f"The closed-set classification accuracy is {accuracy*100.0:.1f}%, which meets the readiness criteria of >= 60%."
+        if accuracy >= 0.60 else
+        f"The closed-set classification accuracy is only {accuracy*100.0:.1f}%, which is below the target readiness threshold of 60%."
+    )
     
-    # 10.7 qwen_smoke_test_report.md
-    with open(os.path.join(RESULTS_DIR, "qwen_smoke_test_report.md"), "w") as f:
-        f.write("# Qwen3-VL-4B-Instruct Balanced Smoke Test Report\n\n")
+    # 9.4 closed_set_smoke_test_report.md
+    with open(os.path.join(RESULTS_DIR, "closed_set_smoke_test_report.md"), "w") as f:
+        f.write("# Closed-Set Qwen3-VL Smoke Test Report\n\n")
         f.write(f"- **Status**: Completed\n")
         f.write(f"- **Final Verdict**: **{decision}**\n\n")
-        f.write("## Overall Performance Summary\n\n")
-        f.write(f"- **Total Samples Processed**: {len(pred_df)}\n")
-        f.write(f"- **Overall Accuracy**: {accuracy:.4f} (compared to 0.0300 for FastVLM)\n")
-        f.write(f"- **Macro F1**: {f1_mac:.4f} (compared to 0.0517 for FastVLM)\n")
-        f.write(f"- **UNKNOWN Rate**: {unknown_count/len(pred_df)*100.0:.1f}% (compared to 95.0% for FastVLM)\n\n")
+        f.write("## Executive Summary\n\n")
+        f.write(f"This report evaluates the performance of Qwen3-VL-4B-Instruct on the closed-set validation subset under the new 10-frame sequence temporal prompt config.\n\n")
+        f.write(f"- **Overall Accuracy**: {accuracy:.4f}\n")
+        f.write(f"- **Macro F1**: {f1_mac:.4f}\n")
+        f.write(f"- **Justification**: {justification}\n\n")
         f.write("## Confusion Matrix Summary\n")
         f.write("```csv\n" + cm_df.to_csv() + "```\n\n")
-        f.write("For more details, see the accompanying report files in this directory.\n")
         
-    print(f"Balanced smoke test finished successfully. Verdict: {decision}")
+    print(f"Closed-set smoke test finished successfully. Verdict: {decision}")
 
 if __name__ == "__main__":
     main()
