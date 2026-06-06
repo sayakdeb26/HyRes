@@ -1,0 +1,21 @@
+split,gesture,count
+train_70,Swipe Left,2913
+train_70,Swipe Right,2859
+train_70,Rolling Hand Forward,2892
+train_70,Stop Sign,3036
+inc10_a,Swipe Left,416
+inc10_a,Swipe Right,408
+inc10_a,Rolling Hand Forward,413
+inc10_a,Stop Sign,434
+inc10_b,Swipe Left,416
+inc10_b,Swipe Right,409
+inc10_b,Rolling Hand Forward,413
+inc10_b,Stop Sign,434
+inc10_c,Swipe Left,417
+inc10_c,Swipe Right,408
+inc10_c,Rolling Hand Forward,414
+inc10_c,Stop Sign,433
+validation,Swipe Left,494
+validation,Swipe Right,486
+validation,Rolling Hand Forward,521
+validation,Stop Sign,536

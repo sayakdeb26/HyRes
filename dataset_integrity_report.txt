@@ -1,17 +1,30 @@
-Dataset Integrity Verification Report
-=======================================
-Train ∩ DS1 = Ø: True
-Train ∩ DS2 = Ø: True
-Train ∩ DS3 = Ø: True
-DS1 ∩ DS2 = Ø: True
-DS2 ∩ DS3 = Ø: True
-DS1 ∩ DS3 = Ø: True
+=========================================================
+Phase-1 Dataset Integrity Verification Audit
+=========================================================
 
-NO DUPLICATES FOUND. Integrity passed.
+Total Source Videos Found & Symlinked: 18752
+Total Missing Folders: 0
+Total Symlinks Verified in Folders: 18752
+Broken Symlinks Detected: 0
 
-Class Distribution Summary:
-   Split  Swipe Left  Swipe Right  Rolling Forward  Rolling Backward  Thumb Down  Stop Sign
-0  Train        1233         1211             1252              1200        1267       1275
-1    DS1         176          173              178               172         181        182
-2    DS2         176          173              179               172         181        182
-3    DS3         177          173              179               171         181        182
+Split Sizes (Video Counts):
+  train_70:   11700
+  inc10_a:    1671
+  inc10_b:    1672
+  inc10_c:    1672
+  validation: 2037
+  Total:      18752
+
+Overlap Verification:
+  train_70 vs inc10_a: PASSED (0 overlap)
+  train_70 vs inc10_b: PASSED (0 overlap)
+  train_70 vs inc10_c: PASSED (0 overlap)
+  train_70 vs validation: PASSED (0 overlap)
+  inc10_a vs inc10_b: PASSED (0 overlap)
+  inc10_b vs inc10_c: PASSED (0 overlap)
+  inc10_a vs inc10_c: PASSED (0 overlap)
+  inc10_a vs validation: PASSED (0 overlap)
+  inc10_b vs validation: PASSED (0 overlap)
+  inc10_c vs validation: PASSED (0 overlap)
+
+Overall Integrity Status: PASS
