@@ -87,11 +87,7 @@ def _patch_internlm2_causal_mask(model):
 
     # 2. Patch prepare_inputs_for_generation to prevent empty input_ids on the first step when inputs_embeds is provided
     orig_prep = causal_lm.prepare_inputs_for_generation.__func__
-    def safe_prep(self, *args, **kwargs):
-        input_ids = args[0] if len(args) > 0 else kwargs.get('input_ids')
-        inputs_embeds = kwargs.get('inputs_embeds')
-        past_key_values = kwargs.get('past_key_values')
-        
+    def safe_prep(self, input_ids, past_key_values=None, attention_mask=None, inputs_embeds=None, cache_position=None, use_cache=True, **kwargs):
         is_empty_cache = False
         if past_key_values is not None:
             if hasattr(past_key_values, "get_seq_length"):
@@ -100,13 +96,11 @@ def _patch_internlm2_causal_mask(model):
                 is_empty_cache = True
 
         if inputs_embeds is not None and (past_key_values is None or is_empty_cache):
-            kwargs_copy = dict(kwargs)
-            kwargs_copy['past_key_values'] = None
-            res = orig_prep(self, *args, **kwargs_copy)
+            res = orig_prep(self, input_ids, past_key_values=None, attention_mask=attention_mask, inputs_embeds=inputs_embeds, cache_position=cache_position, use_cache=use_cache, **kwargs)
             res['past_key_values'] = past_key_values
             return res
 
-        return orig_prep(self, *args, **kwargs)
+        return orig_prep(self, input_ids, past_key_values=past_key_values, attention_mask=attention_mask, inputs_embeds=inputs_embeds, cache_position=cache_position, use_cache=use_cache, **kwargs)
     causal_lm.prepare_inputs_for_generation = types.MethodType(safe_prep, causal_lm)
     print("Patched InternLM2 model components (causal mask + inputs_embeds prep) for compatibility.")
 
