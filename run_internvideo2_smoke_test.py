@@ -320,9 +320,13 @@ def main():
     subset_df.to_csv(os.path.join(RESULTS_DIR, "internvideo2_20frame_subset.csv"), index=False)
     print("Saved internvideo2_20frame_subset.csv.")
     
-    # 2. Try loading model — tier cascade: 8-bit → fp16 60/40 split → fail
-    from transformers import AutoTokenizer, AutoModel, BitsAndBytesConfig
-    
+    # 2. Load model — fp16 with explicit max_memory (60% GPU / 40% CPU)
+    # IMPORTANT: 8-bit quantization was intentionally SKIPPED.
+    # 8-bit loads fine but causes GPU-Util=0% deadlock during inference because bitsandbytes
+    # runs int8 matmuls on GPU but the offloaded LM layers get stuck in a CPU-GPU transfer loop.
+    # fp16 with max_memory lets accelerate place layers cleanly with no quantization overhead.
+    from transformers import AutoTokenizer, AutoModel
+
     vram_before = get_vram_info()
     ram_before = psutil.virtual_memory().percent
     t_load_start = time.time()
@@ -332,48 +336,43 @@ def main():
     device_map_info = "N/A"
     load_mode_used = "N/A"
 
-    # Always load tokenizer first (no quantization needed)
+    # Always load tokenizer first
     tokenizer = AutoTokenizer.from_pretrained(
         MODEL_ID,
         trust_remote_code=True,
         use_fast=False
     )
 
-    # ── TIER 1: 8-bit bitsandbytes ──────────────────────────────────────────────
-    print("Tier 1: Attempting 8-bit quantization...")
-    quant_8bit = BitsAndBytesConfig(
-        load_in_8bit=True,
-        llm_int8_enable_fp32_cpu_offload=True,    # allow CPU offload for large layers
-    )
+    # ── Tier 1: fp16 — GPU-priority (fits everything possible on GPU first) ─────
+    print("Tier 1: fp16 GPU-priority load (device_map=auto, no max_memory cap)...")
     try:
         model = AutoModel.from_pretrained(
             MODEL_ID,
-            quantization_config=quant_8bit,
+            torch_dtype=torch.float16,
             device_map="auto",
             trust_remote_code=True,
         )
         load_success = True
-        load_mode_used = "8-bit (bitsandbytes)"
+        load_mode_used = "fp16 GPU-priority (device_map=auto)"
         if hasattr(model, "hf_device_map"):
             device_map_info = str(model.hf_device_map)
-        print("Tier 1: 8-bit load SUCCESS.")
+        print("Tier 1: fp16 GPU-priority load SUCCESS.")
+    except torch.cuda.OutOfMemoryError:
+        load_error = traceback.format_exc()
+        print(f"Tier 1 OOM — falling through to Tier 2.\n{load_error}")
     except Exception as e:
         load_error = traceback.format_exc()
-        print(f"Tier 1 (8-bit) FAILED:\n{load_error}")
+        print(f"Tier 1 FAILED:\n{load_error}")
 
-    # ── TIER 2: fp16 with explicit 60% GPU / 40% CPU max_memory split ────────────
+    # ── Tier 2: fp16 — explicit 60% GPU / 40% CPU max_memory split ──────────────
     if not load_success:
-        print("Tier 2: Attempting fp16 with explicit 60/40 GPU/CPU max_memory split...")
-        # RTX 5070 has 8 GB = 8192 MiB. 60% = ~4915 MiB; keep 600 MiB headroom → 4300 MiB GPU
-        # Remaining layers go to CPU RAM (32 GB available)
-        max_memory = {
-            0: "4300MiB",
-            "cpu": "24000MiB"
-        }
+        print("Tier 2: fp16 with explicit 60/40 GPU/CPU max_memory split...")
+        # 8 GB GPU: 60% usable ≈ 4915 MiB; reserve ~600 MiB headroom → 4300 MiB GPU
+        max_memory = {0: "4300MiB", "cpu": "24000MiB"}
         try:
             model = AutoModel.from_pretrained(
                 MODEL_ID,
-                dtype=torch.float16,
+                torch_dtype=torch.float16,
                 device_map="auto",
                 max_memory=max_memory,
                 trust_remote_code=True,
@@ -385,7 +384,7 @@ def main():
             print("Tier 2: fp16 60/40 split load SUCCESS.")
         except Exception as e:
             load_error = traceback.format_exc()
-            print(f"Tier 2 (fp16 60/40 split) FAILED:\n{load_error}")
+            print(f"Tier 2 FAILED:\n{load_error}")
 
     t_load_end = time.time()
     load_time = t_load_end - t_load_start
@@ -428,11 +427,45 @@ def main():
         f.write(f"- **Peak VRAM after Load**: {vram_after:.1f} MB\n")
         f.write(f"- **Peak RAM after Load**: {ram_after:.1f}%\n")
 
-
     if not load_success:
         print("All loading tiers failed. Exiting.")
         sys.exit(1)
-        
+
+    # ── Inference probe: run one dummy forward to confirm model is not frozen ────
+    print("Running inference probe (1 sample) to confirm model is responsive...")
+    probe_dir = None
+    probe_df = subset_df.iloc[:1]
+    for _, row in probe_df.iterrows():
+        probe_dir = os.path.join(WORKSPACE_DIR, "DataSet_Full", "phase1", "validation", str(row["video_id"]))
+    probe_tensor = load_video_from_frames(probe_dir, num_segments=4, resolution=224, hd_num=6)
+    if probe_tensor is None:
+        print("Probe failed: no frames. Exiting.")
+        sys.exit(1)
+    probe_tensor = probe_tensor.to(model.device)
+    try:
+        import signal
+        def _timeout_handler(signum, frame):
+            raise TimeoutError("Inference probe timed out (>120s). Model is frozen.")
+        signal.signal(signal.SIGALRM, _timeout_handler)
+        signal.alarm(120)   # 2-minute hard timeout for the probe
+        with torch.no_grad():
+            _resp, _ = model.chat(
+                tokenizer, '', 'Classify this gesture: SWIPE_LEFT, SWIPE_RIGHT, ROLL_FWD, STOP_SIGN. Answer with one label.',
+                instruction=None,
+                media_type='video',
+                media_tensor=probe_tensor,
+                chat_history=[],
+                return_history=True,
+                generation_config={'do_sample': False, 'max_new_tokens': 16}
+            )
+        signal.alarm(0)
+        print(f"Inference probe PASSED. Response: {_resp[:80]!r}")
+    except TimeoutError as te:
+        print(f"ERROR: {te}")
+        print("Model is loaded but GPU-Util is 0% — likely a CPU-offload deadlock. Cannot proceed.")
+        sys.exit(1)
+
+
     # 3. Initialize resource monitor thread
     monitor = ResourceMonitor(interval=0.1)
     monitor.start()
