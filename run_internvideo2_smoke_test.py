@@ -456,7 +456,7 @@ def main():
                 media_tensor=probe_tensor,
                 chat_history=[],
                 return_history=True,
-                generation_config={'do_sample': False, 'max_new_tokens': 16}
+                generation_config={'do_sample': False, 'max_new_tokens': 16, 'use_cache': False}
             )
         signal.alarm(0)
         print(f"Inference probe PASSED. Response: {_resp[:80]!r}")
@@ -507,7 +507,7 @@ def main():
                 media_tensor=video_tensor, 
                 chat_history=chat_history, 
                 return_history=True,
-                generation_config={'do_sample': False, 'max_new_tokens': 512}
+                generation_config={'do_sample': False, 'max_new_tokens': 256, 'use_cache': False}
             )
         t_inf_end = time.time()
         t_inf_ms = (t_inf_end - t_inf_start) * 1000.0
