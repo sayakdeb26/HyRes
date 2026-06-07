@@ -28,8 +28,10 @@ import vlm_node
 # Config
 WORKSPACE_DIR = "/home/sayak/HyRes"
 MANIFEST_PATH = os.path.join(WORKSPACE_DIR, "dataset_manifest_phase1.csv")
-RESULTS_DIR = os.path.join(WORKSPACE_DIR, "experiment_results/phase2_qwen/smoke_test")
+RUN_NAME = os.getenv("RUN_NAME", "run_" + time.strftime("%Y%m%d_%H%M%S"))
+RESULTS_DIR = os.path.join(WORKSPACE_DIR, "experiment_results/phase2_qwen/smoke_test", RUN_NAME)
 os.makedirs(RESULTS_DIR, exist_ok=True)
+print(f"Results will be saved in: {RESULTS_DIR}")
 
 MODEL_ID = "Qwen/Qwen3-VL-4B-Instruct"
 
@@ -290,7 +292,7 @@ def main():
             f.write("No fallback events occurred during the test; all outputs matched canonical labels exactly.\n")
 
     # 8. Compare with previous Qwen smoke test
-    prev_pred_path = os.path.join(RESULTS_DIR, "qwen_smoke_predictions.csv")
+    prev_pred_path = os.path.join(WORKSPACE_DIR, "experiment_results/phase2_qwen/smoke_test/qwen_smoke_predictions.csv")
     if os.path.exists(prev_pred_path):
         prev_df = pd.read_csv(prev_pred_path)
         y_true_prev = prev_df["true_label"].tolist()

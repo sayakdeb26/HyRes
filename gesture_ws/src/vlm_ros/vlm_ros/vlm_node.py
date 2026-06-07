@@ -17,17 +17,6 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 # Must stay in sync with your LSTM / dataset labels
 PRODUCTION_GESTURE_LABELS = [
-    "ROLL_BACK",
-    "ROLL_FWD",
-    "SWIPE_DOWN",
-    "SWIPE_LEFT",
-    "SWIPE_RIGHT",
-    "SWIPE_UP",
-    "THUMB_DOWN",
-    "THUMB_UP",
-    "ZOOM_IN",
-    "ZOOM_OUT",
-    "NO_GESTURE",
     "UNKNOWN",
 ]
 
@@ -38,27 +27,7 @@ BENCHMARK_GESTURE_LABELS = [
     "STOP_SIGN",
 ]
 
-DEFAULT_GESTURE_PROMPT = """You will be given frames from a short video.
-Each frame contains a single person performing exactly one hand gesture.
-Focus only on the hands and ignore the face, background, or other objects.
-
-Choose exactly ONE label from the following list that best describes the hand gesture:
-
-- ROLL_BACK
-- ROLL_FWD
-- SWIPE_DOWN
-- SWIPE_LEFT
-- SWIPE_RIGHT
-- SWIPE_UP
-- THUMB_DOWN
-- THUMB_UP
-- ZOOM_IN
-- ZOOM_OUT
-- NO_GESTURE
-- UNKNOWN
-
-If none of the labels fits, answer UNKNOWN.
-Respond with ONLY the label text, nothing else.
+DEFAULT_GESTURE_PROMPT = """NA
 """
 
 BENCHMARK_PROMPT = """
