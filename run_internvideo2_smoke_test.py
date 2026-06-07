@@ -31,6 +31,17 @@ def patched_resize(self, new_num_tokens=None, pad_to_multiple_of=None, mean_resi
     return orig_resize(self, new_num_tokens=new_num_tokens, pad_to_multiple_of=pad_to_multiple_of, mean_resizing=False, **kwargs)
 transformers.PreTrainedModel.resize_token_embeddings = patched_resize
 
+orig_tie = transformers.PreTrainedModel.tie_embeddings_and_encoder_decoder
+def patched_tie(self):
+    try:
+        return orig_tie(self)
+    except AttributeError as e:
+        if "'NoneType' object has no attribute 'predictions'" in str(e):
+            pass
+        else:
+            raise e
+transformers.PreTrainedModel.tie_embeddings_and_encoder_decoder = patched_tie
+
 # Config
 WORKSPACE_DIR = "/home/sayak/HyRes"
 MANIFEST_PATH = os.path.join(WORKSPACE_DIR, "dataset_manifest_phase1.csv")
