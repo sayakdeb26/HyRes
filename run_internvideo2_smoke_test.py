@@ -62,30 +62,55 @@ transformers.PreTrainedModel._initialize_missing_keys = patched_init_missing
 
 def _patch_internlm2_causal_mask(model):
     """
-    Monkey-patch InternLM2Model._update_causal_mask to guard against:
-    - sequence_length == 0 (empty input on 2nd+ generation step with use_cache=False)
-    - empty cache_position tensor (size 0) causing broadcast mismatch
-    This is a compatibility fix for newer transformers versions vs InternLM2.5's cached model code.
+    Monkey-patch InternLM2Model._update_causal_mask and InternLM2ForCausalLM.prepare_inputs_for_generation
+    to fix compatibility with newer transformers versions where inputs_embeds is incorrectly
+    discarded due to empty DynamicCache initialization on the first generation step.
     """
     import types
     try:
         internlm_model = model.lm.base_model.model.model  # PEFT LoRA wrapped
+        causal_lm = model.lm.base_model.model
     except AttributeError:
         try:
             internlm_model = model.lm.model
+            causal_lm = model.lm
         except AttributeError:
             return
 
+    # 1. Patch _update_causal_mask to prevent RuntimeError in empty cache_position/sequence cases
     orig_update = internlm_model._update_causal_mask.__func__
-
     def safe_update_causal_mask(self, attention_mask, input_tensor, cache_position, past_key_values, output_attentions):
-        # Guard: if sequence_length is 0 or cache_position is empty, return None (no mask needed)
         if input_tensor.shape[1] == 0 or (cache_position is not None and cache_position.numel() == 0):
             return None
         return orig_update(self, attention_mask, input_tensor, cache_position, past_key_values, output_attentions)
-
     internlm_model._update_causal_mask = types.MethodType(safe_update_causal_mask, internlm_model)
-    print("Patched InternLM2Model._update_causal_mask for empty cache_position safety.")
+
+    # 2. Patch prepare_inputs_for_generation to prevent empty input_ids on the first step when inputs_embeds is provided
+    orig_prep = causal_lm.prepare_inputs_for_generation.__func__
+    def safe_prep(self, *args, **kwargs):
+        input_ids = args[0] if len(args) > 0 else kwargs.get('input_ids')
+        inputs_embeds = kwargs.get('inputs_embeds')
+        past_key_values = kwargs.get('past_key_values')
+        
+        is_empty_cache = False
+        if past_key_values is not None:
+            if hasattr(past_key_values, "get_seq_length"):
+                is_empty_cache = (past_key_values.get_seq_length() == 0)
+            elif len(past_key_values) == 0:
+                is_empty_cache = True
+
+        if inputs_embeds is not None and (past_key_values is None or is_empty_cache):
+            kwargs_copy = dict(kwargs)
+            kwargs_copy['past_key_values'] = None
+            res = orig_prep(self, *args, **kwargs_copy)
+            res['past_key_values'] = past_key_values
+            return res
+
+        return orig_prep(self, *args, **kwargs)
+    causal_lm.prepare_inputs_for_generation = types.MethodType(safe_prep, causal_lm)
+    print("Patched InternLM2 model components (causal mask + inputs_embeds prep) for compatibility.")
+
+
 
 
 WORKSPACE_DIR = "/home/sayak/HyRes"
@@ -488,7 +513,7 @@ def main():
                 media_tensor=probe_tensor,
                 chat_history=[],
                 return_history=True,
-                generation_config={'do_sample': False, 'max_new_tokens': 16, 'use_cache': False}
+                generation_config={'do_sample': False, 'max_new_tokens': 16}
             )
         signal.alarm(0)
         print(f"Inference probe PASSED. Response: {_resp[:80]!r}")
@@ -539,7 +564,7 @@ def main():
                 media_tensor=video_tensor, 
                 chat_history=chat_history, 
                 return_history=True,
-                generation_config={'do_sample': False, 'max_new_tokens': 256, 'use_cache': False}
+                generation_config={'do_sample': False, 'max_new_tokens': 256}
             )
         t_inf_end = time.time()
         t_inf_ms = (t_inf_end - t_inf_start) * 1000.0
