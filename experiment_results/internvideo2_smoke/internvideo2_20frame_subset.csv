@@ -1,0 +1,21 @@
+video_id,gesture_name,new_label,source_split,assigned_split
+48476,Swipe Left,0,val,validation
+26696,Swipe Left,0,val,validation
+39995,Swipe Left,0,val,validation
+37036,Swipe Left,0,val,validation
+46299,Swipe Left,0,val,validation
+74390,Swipe Right,1,val,validation
+77059,Swipe Right,1,val,validation
+85662,Swipe Right,1,val,validation
+120211,Swipe Right,1,val,validation
+112080,Swipe Right,1,val,validation
+34249,Rolling Hand Forward,2,val,validation
+107172,Rolling Hand Forward,2,val,validation
+115605,Rolling Hand Forward,2,val,validation
+121065,Rolling Hand Forward,2,val,validation
+39880,Rolling Hand Forward,2,val,validation
+96617,Stop Sign,3,val,validation
+41419,Stop Sign,3,val,validation
+144061,Stop Sign,3,val,validation
+2914,Stop Sign,3,val,validation
+41812,Stop Sign,3,val,validation
