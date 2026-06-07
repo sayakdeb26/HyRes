@@ -320,66 +320,95 @@ def main():
     subset_df.to_csv(os.path.join(RESULTS_DIR, "internvideo2_20frame_subset.csv"), index=False)
     print("Saved internvideo2_20frame_subset.csv.")
     
-    # 2. Try loading model in 4-bit
-    print("Attempting to load model in 4-bit quantization using bitsandbytes...")
+    # 2. Try loading model — tier cascade: 8-bit → fp16 60/40 split → fail
     from transformers import AutoTokenizer, AutoModel, BitsAndBytesConfig
     
     vram_before = get_vram_info()
     ram_before = psutil.virtual_memory().percent
     t_load_start = time.time()
-    
-    quant_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_compute_dtype=torch.float16,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_use_double_quant=True
-    )
-    
+
     load_success = False
     load_error = None
     device_map_info = "N/A"
-    
+    load_mode_used = "N/A"
+
+    # Always load tokenizer first (no quantization needed)
+    tokenizer = AutoTokenizer.from_pretrained(
+        MODEL_ID,
+        trust_remote_code=True,
+        use_fast=False
+    )
+
+    # ── TIER 1: 8-bit bitsandbytes ──────────────────────────────────────────────
+    print("Tier 1: Attempting 8-bit quantization...")
+    quant_8bit = BitsAndBytesConfig(
+        load_in_8bit=True,
+        llm_int8_enable_fp32_cpu_offload=True,    # allow CPU offload for large layers
+    )
     try:
-        tokenizer = AutoTokenizer.from_pretrained(
-            MODEL_ID,
-            trust_remote_code=True,
-            use_fast=False
-        )
         model = AutoModel.from_pretrained(
             MODEL_ID,
-            quantization_config=quant_config,
+            quantization_config=quant_8bit,
             device_map="auto",
-            trust_remote_code=True
+            trust_remote_code=True,
         )
         load_success = True
+        load_mode_used = "8-bit (bitsandbytes)"
         if hasattr(model, "hf_device_map"):
             device_map_info = str(model.hf_device_map)
+        print("Tier 1: 8-bit load SUCCESS.")
     except Exception as e:
         load_error = traceback.format_exc()
-        print(f"4-bit loading FAILED:\n{load_error}")
-        
+        print(f"Tier 1 (8-bit) FAILED:\n{load_error}")
+
+    # ── TIER 2: fp16 with explicit 60% GPU / 40% CPU max_memory split ────────────
+    if not load_success:
+        print("Tier 2: Attempting fp16 with explicit 60/40 GPU/CPU max_memory split...")
+        # RTX 5070 has 8 GB = 8192 MiB. 60% = ~4915 MiB; keep 600 MiB headroom → 4300 MiB GPU
+        # Remaining layers go to CPU RAM (32 GB available)
+        max_memory = {
+            0: "4300MiB",
+            "cpu": "24000MiB"
+        }
+        try:
+            model = AutoModel.from_pretrained(
+                MODEL_ID,
+                dtype=torch.float16,
+                device_map="auto",
+                max_memory=max_memory,
+                trust_remote_code=True,
+            )
+            load_success = True
+            load_mode_used = "fp16 (60% GPU / 40% CPU split)"
+            if hasattr(model, "hf_device_map"):
+                device_map_info = str(model.hf_device_map)
+            print("Tier 2: fp16 60/40 split load SUCCESS.")
+        except Exception as e:
+            load_error = traceback.format_exc()
+            print(f"Tier 2 (fp16 60/40 split) FAILED:\n{load_error}")
+
     t_load_end = time.time()
     load_time = t_load_end - t_load_start
     vram_after = get_vram_info()
     ram_after = psutil.virtual_memory().percent
-    
+
     # Write Load Report
     with open(os.path.join(RESULTS_DIR, "internvideo2_load_report.md"), "w") as f:
-        f.write("# InternVideo2-Chat-8B-InternLM2.5 4-bit Load Report\n\n")
+        f.write("# InternVideo2-Chat-8B-InternLM2.5 Load Report\n\n")
         f.write(f"- **Load Status**: {'SUCCESS' if load_success else 'FAILED'}\n")
-        f.write(f"- **Requested Mode**: 4-bit (nf4, double quant, FP16 compute)\n")
+        f.write(f"- **Mode Used**: {load_mode_used}\n")
         f.write(f"- **Load Time**: {load_time:.2f} seconds\n")
         f.write(f"- **VRAM Before Load**: {vram_before:.1f} MB\n")
         f.write(f"- **VRAM After Load**: {vram_after:.1f} MB\n")
         f.write(f"- **Delta VRAM**: {vram_after - vram_before:.1f} MB\n")
         f.write(f"- **RAM Before Load**: {ram_before:.1f}%\n")
         f.write(f"- **RAM After Load**: {ram_after:.1f}%\n\n")
-        f.write("## Device Map Layers Placement\n")
+        f.write("## Device Map Layer Placement\n")
         f.write(f"```python\n{device_map_info}\n```\n\n")
         if not load_success:
             f.write("## Error Details\n")
-            f.write(f"```python\n{load_error}\n```\n")
-            
+            f.write(f"```\n{load_error}\n```\n")
+
     # Write Offload Report
     gpu_layers_count = 0
     cpu_layers_count = 0
@@ -389,17 +418,19 @@ def main():
                 cpu_layers_count += 1
             else:
                 gpu_layers_count += 1
-                
+
     with open(os.path.join(RESULTS_DIR, "internvideo2_offload_report.md"), "w") as f:
         f.write("# InternVideo2 GPU/CPU Offloading Report\n\n")
+        f.write(f"- **Mode**: {load_mode_used}\n")
         f.write(f"- **Layers on GPU**: {gpu_layers_count}\n")
         f.write(f"- **Layers on CPU/Disk**: {cpu_layers_count}\n")
         f.write(f"- **Model Load Time**: {load_time:.2f} seconds\n")
         f.write(f"- **Peak VRAM after Load**: {vram_after:.1f} MB\n")
         f.write(f"- **Peak RAM after Load**: {ram_after:.1f}%\n")
-        
+
+
     if not load_success:
-        print("Model failed to load in 4-bit. Exiting.")
+        print("All loading tiers failed. Exiting.")
         sys.exit(1)
         
     # 3. Initialize resource monitor thread
