@@ -42,6 +42,24 @@ def patched_tie(self):
             raise e
 transformers.PreTrainedModel.tie_embeddings_and_encoder_decoder = patched_tie
 
+orig_init_missing = transformers.PreTrainedModel._initialize_missing_keys
+def patched_init_missing(self, missing_keys, is_quantized=False):
+    # Filter out any key whose module chain hits a None (e.g. qformer.cls.* after cls is set to None)
+    filtered = []
+    for key in missing_keys:
+        parts = key.split(".")
+        obj = self
+        broken = False
+        for part in parts[:-1]:
+            obj = getattr(obj, part, None)
+            if obj is None:
+                broken = True
+                break
+        if not broken:
+            filtered.append(key)
+    return orig_init_missing(self, filtered, is_quantized)
+transformers.PreTrainedModel._initialize_missing_keys = patched_init_missing
+
 # Config
 WORKSPACE_DIR = "/home/sayak/HyRes"
 MANIFEST_PATH = os.path.join(WORKSPACE_DIR, "dataset_manifest_phase1.csv")
