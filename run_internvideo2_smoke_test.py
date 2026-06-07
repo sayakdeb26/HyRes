@@ -19,12 +19,17 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_recall_fscore_support
 
-# Monkey-patching transformers to fix missing legacy methods in newer versions
+# Monkey-patching transformers to fix missing legacy methods and meta tensor errors in newer versions
 import transformers
 import transformers.pytorch_utils
 transformers.modeling_utils.apply_chunking_to_forward = transformers.pytorch_utils.apply_chunking_to_forward
 transformers.modeling_utils.find_pruneable_heads_and_indices = transformers.pytorch_utils.find_pruneable_heads_and_indices
 transformers.modeling_utils.prune_linear_layer = transformers.pytorch_utils.prune_linear_layer
+
+orig_resize = transformers.PreTrainedModel.resize_token_embeddings
+def patched_resize(self, new_num_tokens=None, pad_to_multiple_of=None, mean_resizing=True, **kwargs):
+    return orig_resize(self, new_num_tokens=new_num_tokens, pad_to_multiple_of=pad_to_multiple_of, mean_resizing=False, **kwargs)
+transformers.PreTrainedModel.resize_token_embeddings = patched_resize
 
 # Config
 WORKSPACE_DIR = "/home/sayak/HyRes"
