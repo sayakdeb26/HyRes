@@ -95,12 +95,30 @@ def _patch_internlm2_causal_mask(model):
             elif len(past_key_values) == 0:
                 is_empty_cache = True
 
-        if inputs_embeds is not None and (past_key_values is None or is_empty_cache):
-            res = orig_prep(self, input_ids, past_key_values=None, attention_mask=attention_mask, inputs_embeds=inputs_embeds, cache_position=cache_position, use_cache=use_cache, **kwargs)
-            res['past_key_values'] = past_key_values
-            return res
+        restore_get_max = None
+        if past_key_values is not None and hasattr(past_key_values, "get_max_cache_shape"):
+            try:
+                max_cache_shape = past_key_values.get_max_cache_shape()
+                if max_cache_shape is not None and max_cache_shape < 0:
+                    restore_get_max = past_key_values.get_max_cache_shape
+                    past_key_values.get_max_cache_shape = lambda: None
+            except Exception:
+                pass
 
-        return orig_prep(self, input_ids, past_key_values=past_key_values, attention_mask=attention_mask, inputs_embeds=inputs_embeds, cache_position=cache_position, use_cache=use_cache, **kwargs)
+        try:
+            if inputs_embeds is not None and (past_key_values is None or is_empty_cache):
+                res = orig_prep(self, input_ids, past_key_values=None, attention_mask=attention_mask, inputs_embeds=inputs_embeds, cache_position=cache_position, use_cache=use_cache, **kwargs)
+                res['past_key_values'] = past_key_values
+                return res
+
+            res = orig_prep(self, input_ids, past_key_values=past_key_values, attention_mask=attention_mask, inputs_embeds=inputs_embeds, cache_position=cache_position, use_cache=use_cache, **kwargs)
+            return res
+        finally:
+            if restore_get_max is not None:
+                try:
+                    past_key_values.get_max_cache_shape = restore_get_max
+                except Exception:
+                    pass
     causal_lm.prepare_inputs_for_generation = types.MethodType(safe_prep, causal_lm)
     print("Patched InternLM2 model components (causal mask + inputs_embeds prep) for compatibility.")
 
