@@ -138,40 +138,7 @@ def main():
     latencies = []
     resource_stats = []
     
-    prompt_text = (
-        "The five images are consecutive frames from the same hand gesture video.\n"
-        "Analyze the motion occurring across the sequence of frames.\n"
-        "Focus on:\n"
-        "- movement direction\n"
-        "- temporal progression\n"
-        "- hand trajectory\n"
-        "- changes between consecutive frames\n\n"
-        "Possible gestures:\n"
-        "SWIPE_LEFT\n"
-        "SWIPE_RIGHT\n"
-        "ROLL_FWD\n"
-        "STOP_SIGN\n\n"
-        "Gesture descriptions:\n"
-        "SWIPE_LEFT\n"
-        "- Hand moves horizontally from right to left.\n\n"
-        "SWIPE_RIGHT\n"
-        "- Hand moves horizontally from left to right.\n\n"
-        "ROLL_FWD\n"
-        "- Hand performs a circular rolling motion forward.\n\n"
-        "STOP_SIGN\n"
-        "- Static open palm facing the camera.\n"
-        "- Minimal motion across frames.\n\n"
-        "Determine which gesture best matches the complete sequence.\n"
-        "Respond with ONLY ONE label:\n"
-        "SWIPE_LEFT\n"
-        "SWIPE_RIGHT\n"
-        "ROLL_FWD\n"
-        "STOP_SIGN\n"
-        "UNKNOWN\n\n"
-        "Do not explain.\n"
-        "Do not reason.\n"
-        "Do not output any additional text."
-    )
+    prompt_text = vlm_node.BENCHMARK_PROMPT
     
     for idx, row in subset_df.iterrows():
         video_id = str(row["video_id"])

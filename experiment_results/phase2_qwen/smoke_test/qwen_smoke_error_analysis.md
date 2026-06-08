@@ -4,11 +4,11 @@
 
 | Confusion Pair | Count | Percentage of Errors |
 |---|---|---|
-| SWIPE_RIGHT -> SWIPE_LEFT | 14 | 22.6% |
-| ROLL_FWD -> SWIPE_LEFT | 11 | 17.7% |
-| SWIPE_LEFT -> SWIPE_RIGHT | 9 | 14.5% |
-| SWIPE_RIGHT -> STOP_SIGN | 8 | 12.9% |
-| ROLL_FWD -> STOP_SIGN | 8 | 12.9% |
-| ROLL_FWD -> SWIPE_RIGHT | 6 | 9.7% |
-| SWIPE_LEFT -> STOP_SIGN | 5 | 8.1% |
-| SWIPE_LEFT -> ROLL_FWD | 1 | 1.6% |
+| SWIPE_LEFT -> ROLL_FWD | 11 | 25.6% |
+| SWIPE_RIGHT -> ROLL_FWD | 8 | 18.6% |
+| SWIPE_LEFT -> SWIPE_RIGHT | 7 | 16.3% |
+| SWIPE_RIGHT -> STOP_SIGN | 6 | 14.0% |
+| SWIPE_LEFT -> STOP_SIGN | 5 | 11.6% |
+| SWIPE_RIGHT -> SWIPE_LEFT | 4 | 9.3% |
+| ROLL_FWD -> SWIPE_LEFT | 1 | 2.3% |
+| ROLL_FWD -> STOP_SIGN | 1 | 2.3% |

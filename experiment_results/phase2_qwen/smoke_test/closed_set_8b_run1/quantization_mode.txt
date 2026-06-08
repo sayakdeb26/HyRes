@@ -1,0 +1,1 @@
+Successfully loaded model: Qwen/Qwen3-VL-8B-Instruct in 4-bit mode.
